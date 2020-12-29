@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FileDriveWebAPI.Utils;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,18 @@ namespace FileDriveWebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TestController : ControllerBase
+    public class TestController : Controller
     {
-        public string Get() 
+        [HttpGet]
+        public string Get()
         {
             return "ok";
+        }
+
+        [HttpGet("encrypt")]
+        public string Encrypt(string salt) 
+        {
+            return Crypto.Encrypt("password", salt);
         }
     }
 }

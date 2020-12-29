@@ -9,6 +9,7 @@ namespace FileDriveWebAPI.Data
 {
     public class FileDriveContext: DbContext
     {
+
         public FileDriveContext(DbContextOptions<FileDriveContext> options) : base(options)
         {
         }

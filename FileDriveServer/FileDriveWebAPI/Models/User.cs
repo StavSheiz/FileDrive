@@ -10,6 +10,7 @@ namespace FileDriveWebAPI.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string password { get; set; }
         public ENUMUserType UserType { get; set; }
     }
 }
