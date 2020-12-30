@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace FileDriveWebAPI.Utils.Exceptions
 {
     [Serializable]
-    public class UserNameExistsException : BaseException
+    public class UserDoesNotExistException: BaseException
     {
-        public UserNameExistsException() : base("User name already exists")
+        public UserDoesNotExistException(): base("No user with the given parameters exists") 
         {
-            this.setExceptionCode(ENUMExceptionCodes.UserNameExists);
+            this.setExceptionCode(ENUMExceptionCodes.UserDoesNotExist);
         }
     }
 }

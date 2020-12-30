@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace FileDriveWebAPI.Utils.Exceptions
 {
     [Serializable]
-    public class UserNameExistsException : BaseException
+    public class InvalidPasswordException: BaseException
     {
-        public UserNameExistsException() : base("User name already exists")
+        public InvalidPasswordException() : base("Invalid password. Password must contain 8 or more characters")
         {
-            this.setExceptionCode(ENUMExceptionCodes.UserNameExists);
+            this.setExceptionCode(ENUMExceptionCodes.InvalidPassword);
         }
     }
 }

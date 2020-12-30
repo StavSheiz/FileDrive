@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace FileDriveWebAPI.Enums
 {
-    public enum ENUMUserType
+    public enum ENUMExceptionCodes
     {
-        Normal,
-        Admin
+        UserNameExists,
+        InvalidPassword,
+        UserDoesNotExist
     }
 }

@@ -28,10 +28,10 @@ namespace FileDriveWebAPI.Data
 
             var users = new User[]
             {
-                new User{ Id="12345678", Name="Admin", UserType=Enums.ENUMUserType.ADMIN, password=Crypto.Encrypt("password", "Admin") },
-                new User{ Id="87654321", Name="ShStav", UserType=Enums.ENUMUserType.NORMAL, password=Crypto.Encrypt("password", "ShStav") },
-                new User{ Id="83746582", Name="ZeKoren", UserType=Enums.ENUMUserType.NORMAL, password=Crypto.Encrypt("password", "ZeKoren") },
-                new User{ Id="92837463", Name="DuDonald", UserType=Enums.ENUMUserType.NORMAL, password=Crypto.Encrypt("password", "DuDonald") }
+                new User{ Name="Admin", UserType=Enums.ENUMUserType.Admin, Password=Crypto.Encrypt("password", "Admin") },
+                new User{ Name="ShStav", UserType=Enums.ENUMUserType.Normal, Password=Crypto.Encrypt("password", "ShStav") },
+                new User{ Name="ZeKoren", UserType=Enums.ENUMUserType.Normal, Password=Crypto.Encrypt("password", "ZeKoren") },
+                new User{ Name="DuDonald", UserType=Enums.ENUMUserType.Normal, Password=Crypto.Encrypt("password", "DuDonald") }
             };
 
             foreach (User user in users)
