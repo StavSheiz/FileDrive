@@ -19,5 +19,14 @@ namespace FileDriveWebAPI.DAL
 
             return user;
         }
+
+        public User GetUser(string name) 
+        {
+            User user = dbSet.Where(user => user.Name == name)
+                .Select(user => new User { Name = user.Name, Id = user.Id, UserType = user.UserType })
+                .FirstOrDefault();
+
+            return user;
+        }
     }
 }

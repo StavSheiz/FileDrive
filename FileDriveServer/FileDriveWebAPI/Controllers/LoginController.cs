@@ -21,9 +21,14 @@ namespace FileDriveWebAPI.Controllers
             loginBL = new LoginBL(context);
         }
 
-        public User GetUser(string name, string password) 
+        public Response<User> GetUser(string name, string password) 
         {
-            return loginBL.GetUser(name, password);
+            return new Response<User>(loginBL.GetUser(name, password));
+        }
+
+        public Response<bool> AddUser(string name, string password) 
+        {
+            return new Response<bool>(loginBL.AddUser(name, password));
         }
 
         protected override void Dispose(bool disposing)
