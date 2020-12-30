@@ -1,7 +1,13 @@
 import { ENUMUserType } from '../enums/ENUMUserType';
 
-class User {
-    private id: string;
-    private name: string;
-    private userType: ENUMUserType
+export class User {
+    public id: string;
+    public name: string;
+    public userType: ENUMUserType
+
+    public constructor(id: string, name: string, userType: ENUMUserType) {
+        this.id = id;
+        this.name = name;
+        this.userType = userType;
+    }
 }

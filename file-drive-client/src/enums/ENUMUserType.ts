@@ -1,4 +1,4 @@
 export enum ENUMUserType {
-    NORMAL,
-    ADMIN
+    Normal,
+    Admin
 }

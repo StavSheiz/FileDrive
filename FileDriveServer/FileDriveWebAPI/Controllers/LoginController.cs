@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 namespace FileDriveWebAPI.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class LoginController : Controller
     {
         private LoginBL loginBL;
@@ -23,12 +22,29 @@ namespace FileDriveWebAPI.Controllers
 
         public Response<User> GetUser(string name, string password) 
         {
-            return new Response<User>(loginBL.GetUser(name, password));
+            try
+            {
+                return new Response<User>(loginBL.GetUser(name, password));
+            }
+            catch (Exception ex) 
+            {
+                return new Response<User>(ex);
+            }
+            
         }
 
-        public Response<bool> AddUser(string name, string password) 
+        [HttpPost]
+        public Response<bool> AddUser([FromBody]string name, [FromBody]string password) 
         {
-            return new Response<bool>(loginBL.AddUser(name, password));
+            try
+            {
+                return new Response<bool>(loginBL.AddUser(name, password));
+            }
+            catch (Exception ex) 
+            {
+                return new Response<bool>(false, ex);
+            }
+            
         }
 
         protected override void Dispose(bool disposing)
