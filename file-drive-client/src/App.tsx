@@ -4,6 +4,7 @@ import './App.css';
 import { LoginAPI } from './login/api/login-api';
 
 function App() {
+  LoginAPI.getUser("ShStav", "password").then(data => { console.log(data.data?.name) })
   return (
     <div className="App">
       <header className="App-header">

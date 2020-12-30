@@ -20,17 +20,30 @@ namespace FileDriveWebAPI.Controllers
             loginBL = new LoginBL(context);
         }
 
-        public Response<User> GetUser(string name, string password) 
+        [HttpGet("signIn")]
+        public async Task<Response<bool>> SignInAsync(string name, string password) 
         {
             try
             {
-                return new Response<User>(loginBL.GetUser(name, password));
+                return new Response<bool>((await loginBL.SignInAsync(this.HttpContext, name, password)));
             }
             catch (Exception ex) 
             {
-                return new Response<User>(ex);
+                return new Response<bool>(false, ex);
             }
-            
+        }
+
+        [HttpGet("signOut")]
+        public async Task<Response<bool>> SignOutAsync()
+        {
+            try
+            {
+                return new Response<bool>((await loginBL.SignOutAsync(this.HttpContext)));
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool>(ex);
+            }
         }
 
         [HttpPost]
@@ -44,7 +57,6 @@ namespace FileDriveWebAPI.Controllers
             {
                 return new Response<bool>(false, ex);
             }
-            
         }
 
         protected override void Dispose(bool disposing)

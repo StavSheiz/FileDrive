@@ -8,7 +8,7 @@ export class LoginAPI {
 
     public static async getUser(name: string, password: string) {
         const response = await AxiosRequest.get<IGetUserRequestParams, User>({
-            url: appConfig.baseUrl + "/api/login/",
+            url: appConfig.baseUrl + "/api/login/signIn",
             urlParams: { name, password }
         });
 
