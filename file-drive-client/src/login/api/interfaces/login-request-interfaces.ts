@@ -1,7 +1,10 @@
-export interface IGetUserRequestParams {
+export interface ISignInRequestParams {
     name: string,
     password: string
 }
+
+export interface ISignOutRequestParams { }
+
 
 export interface IAddUserRequestParams { }
 

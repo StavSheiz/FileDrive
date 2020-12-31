@@ -2,9 +2,13 @@
 using FileDriveWebAPI.Models;
 using FileDriveWebAPI.Utils;
 using FileDriveWebAPI.Utils.Exceptions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FileDriveWebAPI.BL
@@ -13,16 +17,40 @@ namespace FileDriveWebAPI.BL
     {
         public LoginBL(FileDriveContext context) : base(context) { }
 
-        public User GetUser(string name, string password)
+        public async Task<bool> SignInAsync(HttpContext httpContext, string name, string password) 
         {
-            User user =  this.unitOfWork.UserRepository.GetUser(name, Crypto.Encrypt(password, name));
+            User user = this.GetUser(name, password);
 
-            if (user == null) 
+            var claims = new List<Claim>
             {
-                throw new UserDoesNotExistException();
-            }
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.SerialNumber, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.UserType.ToString()),
+            };
 
-            return user;
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(5),
+                IsPersistent = true,
+                IssuedUtc = DateTimeOffset.UtcNow
+            };
+
+            await httpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
+            return true;
+        }
+
+        public async Task<bool> SignOutAsync(HttpContext httpContext) 
+        {
+            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return true;
         }
 
         public bool AddUser(string name, string password) 
@@ -49,6 +77,23 @@ namespace FileDriveWebAPI.BL
         private bool validatePassword(string password) 
         {
             return password.Length >= 8;
+        }
+
+        private User GetUser(string name, string password)
+        {
+            if (name == null || password == null) 
+            {
+                throw new UserDoesNotExistException();
+            }
+
+            User user = this.unitOfWork.UserRepository.GetUser(name, Crypto.Encrypt(password, name));
+
+            if (user == null)
+            {
+                throw new UserDoesNotExistException();
+            }
+
+            return user;
         }
     }
 }
