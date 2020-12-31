@@ -81,6 +81,11 @@ namespace FileDriveWebAPI.BL
 
         private User GetUser(string name, string password)
         {
+            if (name == null || password == null) 
+            {
+                throw new UserDoesNotExistException();
+            }
+
             User user = this.unitOfWork.UserRepository.GetUser(name, Crypto.Encrypt(password, name));
 
             if (user == null)

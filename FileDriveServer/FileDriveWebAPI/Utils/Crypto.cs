@@ -7,7 +7,7 @@ namespace FileDriveWebAPI.Utils
 {
     public class Crypto
     {
-        public static string Encrypt(string value, string salt) 
+        public static string Encrypt(string value = "", string salt = "") 
         {
             byte[] valueBytes = System.Text.UnicodeEncoding.Unicode.GetBytes(value);
             byte[] saltBytes = System.Text.UnicodeEncoding.Unicode.GetBytes(salt);
