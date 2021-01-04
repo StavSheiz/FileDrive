@@ -4,6 +4,14 @@ import { Logger } from '../log/logger';
 import { IGetRequestParams, IPostRequestParams } from './interfaces/request-params-interfaces';
 import axios from 'axios'
 
+const headers = {
+    "Access-Control-Allow-Credentials": "*",
+    "Content-Type": "application/json"
+}
+
+axios.defaults.withCredentials = true;
+
+
 
 export class AxiosRequest {
     private constructor() { }
@@ -15,7 +23,7 @@ export class AxiosRequest {
         }
 
         try {
-            const response = await axios.get(url, { params: urlParams });
+            const response = await axios.get(url, { params: urlParams, headers });
 
             if (response.status === 200) {
                 responseData = response.data;
@@ -36,7 +44,7 @@ export class AxiosRequest {
         }
 
         try {
-            const response = await axios.post(url, data, { params: urlParams });
+            const response = await axios.post(url, data, { params: urlParams, headers });
 
             if (response.status === 200) {
                 responseData = response.data;

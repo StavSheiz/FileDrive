@@ -24,11 +24,11 @@ export class LoginAPI {
         return response;
     }
 
-    public static async addUser(name: string, password: string) {
+    public static async addUser(name: string, password: string, confirmPassword: string) {
         const response = await AxiosRequest.post<IAddUserRequestParams, IAddUserRequestData, Boolean>({
             url: appConfig.baseUrl + "/api/login/",
             urlParams: {},
-            data: { name, password },
+            data: { name, password, confirmPassword },
         });
 
         return response;
