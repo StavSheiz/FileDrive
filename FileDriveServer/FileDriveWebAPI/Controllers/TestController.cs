@@ -13,7 +13,7 @@ namespace FileDriveWebAPI.Controllers
     public class TestController : Controller
     {
         [HttpGet]
-        public string Get()
+        public string GetAsync()
         {
             return "ok";
         }

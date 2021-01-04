@@ -10,5 +10,6 @@ export interface IAddUserRequestParams { }
 
 export interface IAddUserRequestData {
     name: string,
-    password: string
+    password: string,
+    confirmPassword: string
 }

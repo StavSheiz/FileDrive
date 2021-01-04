@@ -1,7 +1,6 @@
 ﻿using FileDriveWebAPI.BL;
 using FileDriveWebAPI.Data;
 using FileDriveWebAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -47,11 +46,11 @@ namespace FileDriveWebAPI.Controllers
         }
 
         [HttpPost]
-        public Response<bool> AddUser([FromBody]string name, [FromBody]string password) 
+        public Response<bool> AddUser([FromBody] AddUserParameters parameters) 
         {
             try
             {
-                return new Response<bool>(loginBL.AddUser(name, password));
+                return new Response<bool>(loginBL.AddUser(parameters.name, parameters.password, parameters.confirmPassword));
             }
             catch (Exception ex) 
             {
@@ -63,6 +62,13 @@ namespace FileDriveWebAPI.Controllers
         {
             loginBL.Dispose();
             base.Dispose(disposing);
+        }
+
+        public class AddUserParameters 
+        {
+            public string name;
+            public string password;
+            public string confirmPassword;
         }
     }
 }

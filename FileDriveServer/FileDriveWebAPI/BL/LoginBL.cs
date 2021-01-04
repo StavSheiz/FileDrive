@@ -19,7 +19,18 @@ namespace FileDriveWebAPI.BL
 
         public async Task<bool> SignInAsync(HttpContext httpContext, string name, string password) 
         {
-            User user = this.GetUser(name, password);
+
+            if (name == null || password == null)
+            {
+                throw new InvalidParametersException();
+            }
+
+            User user = this.unitOfWork.UserRepository.GetUser(name, Crypto.Encrypt(password, name));
+
+            if (user == null)
+            {
+                throw new UserDoesNotExistException();
+            }
 
             var claims = new List<Claim>
             {
@@ -33,9 +44,7 @@ namespace FileDriveWebAPI.BL
 
             var authProperties = new AuthenticationProperties
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(5),
                 IsPersistent = true,
-                IssuedUtc = DateTimeOffset.UtcNow
             };
 
             await httpContext.SignInAsync(
@@ -53,9 +62,22 @@ namespace FileDriveWebAPI.BL
             return true;
         }
 
-        public bool AddUser(string name, string password) 
+        public bool AddUser(string name, string password, string confirmPassword) 
         {
-            bool isUniqueName = this.unitOfWork.UserRepository.GetUser(name) == null;
+
+            if (name == null || password == null)
+            {
+                throw new InvalidParametersException();
+            }
+
+            if (password != confirmPassword) 
+            {
+                throw new PasswordNotMatchingException();
+            }
+
+            User user = this.unitOfWork.UserRepository.GetUser(name, Crypto.Encrypt(password, name));
+
+            bool isUniqueName = user == null;
             bool isValidPassword = validatePassword(password);
 
             if (!isUniqueName) 
@@ -68,7 +90,7 @@ namespace FileDriveWebAPI.BL
                 throw new InvalidPasswordException();
             }
 
-            this.unitOfWork.UserRepository.AddUser(name, password);
+            this.unitOfWork.UserRepository.AddUser(name, Crypto.Encrypt(password, name));
             this.unitOfWork.Save();
 
             return true;
@@ -76,24 +98,8 @@ namespace FileDriveWebAPI.BL
 
         private bool validatePassword(string password) 
         {
-            return password.Length >= 8;
+            return password != null && password.Length >= 8;
         }
 
-        private User GetUser(string name, string password)
-        {
-            if (name == null || password == null) 
-            {
-                throw new UserDoesNotExistException();
-            }
-
-            User user = this.unitOfWork.UserRepository.GetUser(name, Crypto.Encrypt(password, name));
-
-            if (user == null)
-            {
-                throw new UserDoesNotExistException();
-            }
-
-            return user;
-        }
     }
 }

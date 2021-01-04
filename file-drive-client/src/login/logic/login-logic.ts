@@ -13,7 +13,8 @@ export class LoginLogic {
             let message;
 
             switch (response.exception.exceptionCode) {
-                case ENUMExceptionCodes.UserDoesNotExist: {
+                case ENUMExceptionCodes.UserDoesNotExist:
+                case ENUMExceptionCodes.InvalidParameters: {
                     message = loginErrorMessage[ENUMExceptionCodes.UserDoesNotExist];
                     break;
                 }
@@ -26,7 +27,7 @@ export class LoginLogic {
             return message;
         }
 
-        // TODO: Redirect here to homepage
+        // TODO: Redirect to homepage
     }
 
     public static async signOut() {
@@ -45,6 +46,41 @@ export class LoginLogic {
             return message;
         }
 
-        // TODO: Redirect here to login
+        // TODO: Redirect to login
+    }
+
+    public static async signUp(name: string, password: string, confirmPassword: string) {
+        const response = await LoginAPI.addUser(name, password, confirmPassword);
+
+        if (response.exception) {
+            let message;
+
+            switch (response.exception.exceptionCode) {
+                case ENUMExceptionCodes.UserNameExists: {
+                    message = loginErrorMessage[ENUMExceptionCodes.UserNameExists];
+                    break;
+                }
+                case ENUMExceptionCodes.InvalidParameters: {
+                    message = loginErrorMessage[ENUMExceptionCodes.InvalidParameters];
+                    break;
+                }
+                case ENUMExceptionCodes.InvalidPassword: {
+                    message = loginErrorMessage[ENUMExceptionCodes.InvalidPassword];
+                    break;
+                }
+                case ENUMExceptionCodes.PasswordNotMatching: {
+                    message = loginErrorMessage[ENUMExceptionCodes.PasswordNotMatching];
+                    break;
+                }
+                default: {
+                    message = loginErrorMessage[ENUMExceptionCodes.RequestError];
+                    break;
+                }
+            }
+
+            return message
+        }
+
+        // TODO: Redirect to login
     }
 }

@@ -3,19 +3,21 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import { Typography, Link, InputAdornment, IconButton, OutlinedInput, InputLabel, FormControl, Button, fade } from '@material-ui/core';
+import { Typography, InputAdornment, IconButton, OutlinedInput, InputLabel, FormControl, Button, fade } from '@material-ui/core';
 import { Visibility, VisibilityOff, Clear } from '@material-ui/icons/';
 import logo from '../../logo.svg'
 import { LoginLogic } from '../logic/login-logic';
 
 
-interface ILoginProps {
+interface ISignUpProps {
     classes: ClassNameMap
 }
-interface ILoginState {
+interface ISignUpState {
     password: string,
+    confirmPassword: string,
     name: string,
     showPassword: boolean,
+    showConfirmPassword: boolean,
     errorMessage: string,
     showErrorMessage: boolean
 }
@@ -36,7 +38,7 @@ const styles = (theme: Theme) => ({
     newAccountPaper: {
         padding: theme.spacing(2),
     },
-    signInButton: {
+    signUpButton: {
         backgroundColor: '#2c974b',
         color: '#ffffff',
         width: '100%'
@@ -52,17 +54,19 @@ const styles = (theme: Theme) => ({
     }
 });
 
-class Login extends React.Component<ILoginProps, ILoginState> {
-    state: ILoginState = {
+class SignUp extends React.Component<ISignUpProps, ISignUpState> {
+    state: ISignUpState = {
         password: '',
+        confirmPassword: '',
         name: '',
         showPassword: false,
+        showConfirmPassword: false,
         errorMessage: '',
         showErrorMessage: false
     }
 
-    handleClickShowPassword = () => {
-        this.setState({ ...this.state, showPassword: !this.state.showPassword });
+    handleClickShowPassword = (prop: 'showPassword' | 'showConfirmPassword') => () => {
+        this.setState({ ...this.state, [prop]: !this.state[prop] });
     };
 
     handleMouseDownPassword = (event: any) => {
@@ -73,12 +77,13 @@ class Login extends React.Component<ILoginProps, ILoginState> {
         this.setState({ ...this.state, [prop]: event.target.value });
     };
 
-    handleSignIn = async () => {
-        const { name, password } = this.state;
-        const message = await LoginLogic.signIn(name, password);
+    handleSignUp = async () => {
+        const { name, password, confirmPassword } = this.state;
+
+        const message = await LoginLogic.signUp(name, password, confirmPassword);
 
         if (message) {
-            this.setState({ ...this.state, showErrorMessage: true, errorMessage: message, password: '' });
+            this.setState({ ...this.state, showErrorMessage: true, errorMessage: message, password: '', confirmPassword: '' });
         }
     }
 
@@ -88,7 +93,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
 
     render() {
         const { classes } = this.props;
-        const { password, showPassword, name, showErrorMessage, errorMessage } = this.state;
+        const { password, confirmPassword, showPassword, showConfirmPassword, name, showErrorMessage, errorMessage } = this.state;
 
         return (
             <div>
@@ -98,7 +103,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                             <img src={logo} className={classes.logo} />
                         </Grid>
                         <Grid item>
-                            <Typography variant="h6">Sign in to FileDrive</Typography>
+                            <Typography variant="h6">Sign Up to FileDrive</Typography>
 
                         </Grid>
                         {showErrorMessage &&
@@ -152,7 +157,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                                                         endAdornment={
                                                             <InputAdornment position="end">
                                                                 <IconButton
-                                                                    onClick={this.handleClickShowPassword}
+                                                                    onClick={this.handleClickShowPassword('showPassword')}
                                                                     onMouseDown={this.handleMouseDownPassword}
                                                                     aria-label="toggle password visibility"
                                                                     edge="end"
@@ -167,21 +172,43 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                                         </Grid>
                                     </Grid>
                                     <Grid item>
+                                        <Grid container wrap="nowrap" direction="column" spacing={2}>
+                                            <Grid item>
+                                                <FormControl fullWidth variant="outlined">
+                                                    <InputLabel htmlFor="confirm-password-input">Confrim password</InputLabel>
+                                                    <OutlinedInput
+                                                        fullWidth
+                                                        onChange={this.handleChange('confirmPassword')}
+                                                        label="Confirm password"
+                                                        id="confirm-password-input"
+                                                        type={showConfirmPassword ? 'text' : 'password'}
+                                                        value={confirmPassword}
+                                                        endAdornment={
+                                                            <InputAdornment position="end">
+                                                                <IconButton
+                                                                    onClick={this.handleClickShowPassword('showConfirmPassword')}
+                                                                    onMouseDown={this.handleMouseDownPassword}
+                                                                    aria-label="toggle password visibility"
+                                                                    edge="end"
+                                                                >
+                                                                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                                                                </IconButton>
+                                                            </InputAdornment>
+                                                        }
+                                                    />
+                                                </FormControl>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item>
                                         <Button
-                                            className={classes.signInButton}
+                                            className={classes.signUpButton}
                                             variant="contained"
                                             disableRipple
-                                            onClick={this.handleSignIn}
-                                        >Sign in</Button>
+                                            onClick={this.handleSignUp}
+                                        >Sign up</Button>
                                     </Grid>
                                 </Grid>
-                            </Paper>
-                        </Grid>
-                        <Grid item>
-                            <Paper className={classes.newAccountPaper}>
-                                <Typography variant="body1">
-                                    New to FileDrive? <Link href="#" > Create an account. </Link> {/* TODO: Redirect to create account */}
-                                </Typography>
                             </Paper>
                         </Grid>
                     </Grid>
@@ -191,4 +218,4 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Login);
+export default withStyles(styles, { withTheme: true })(SignUp);

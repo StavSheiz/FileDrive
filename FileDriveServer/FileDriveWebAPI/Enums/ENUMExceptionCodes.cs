@@ -9,6 +9,8 @@ namespace FileDriveWebAPI.Enums
     {
         UserNameExists,
         InvalidPassword,
-        UserDoesNotExist
+        UserDoesNotExist,
+        InvalidParameters,
+        PasswordNotMatching
     }
 }
