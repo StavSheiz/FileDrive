@@ -25,7 +25,7 @@ export class LoginAPI {
     }
 
     public static async addUser(name: string, password: string, confirmPassword: string) {
-        const response = await AxiosRequest.post<IAddUserRequestParams, IAddUserRequestData, Boolean>({
+        const response = await AxiosRequest.post<IAddUserRequestParams, IAddUserRequestData, boolean>({
             url: appConfig.baseUrl + "/api/login/",
             urlParams: {},
             data: { name, password, confirmPassword },
