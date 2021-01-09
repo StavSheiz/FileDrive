@@ -1,11 +1,10 @@
 import { loginErrorMessage } from './login-error-messages';
 import { LoginAPI } from './../api/login-api';
 import { ENUMExceptionCodes } from '../../enums/ENUMExceptionCodes';
+import { UserService } from '../../utils/user-service/UserService';
 
 
 export class LoginLogic {
-    private constructor() { }
-
     public static async signIn(name: string, password: string) {
         const response = await LoginAPI.signIn(name, password);
 
@@ -27,7 +26,7 @@ export class LoginLogic {
             return message;
         }
 
-        // TODO: Redirect to homepage
+        UserService.setCurrentUser({name})
     }
 
     public static async signOut() {

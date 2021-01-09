@@ -1,13 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Login from './login/components/Login'
-import SignUp from './login/components/SignUp';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route, 
+  Redirect
+} from 'react-router-dom'
+import FilesTree from './files-tree/FilesTree';
+import { UserService } from './utils/user-service/UserService';
 
 function App() {
   return (
     <div className="App">
-      <Login></Login>
+      <Router>
+        <Switch>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/tree">
+            <FilesTree />
+          </Route>
+        </Switch>
+      {
+        UserService.getCurrentUser() === null ? 
+        <Redirect to={'/login'} />
+        : undefined
+      }
+      </Router>
+
     </div>
   );
 }

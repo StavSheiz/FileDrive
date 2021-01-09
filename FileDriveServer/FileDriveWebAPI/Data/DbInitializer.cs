@@ -20,11 +20,16 @@ namespace FileDriveWebAPI.Data
 
         private static void initUsers(FileDriveContext context) 
         {
+            if(context.TreeEntities.Any())
+            {
+                return;
+            }
             // If there are no users, init users data
             if (context.Users.Any())
             {
                 return;
             }
+
 
             var users = new User[]
             {

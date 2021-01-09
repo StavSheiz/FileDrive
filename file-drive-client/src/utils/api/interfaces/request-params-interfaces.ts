@@ -1,7 +1,7 @@
 
 export interface IRequestParams<TUrlParams> {
     url: string;
-    urlParams: TUrlParams
+    urlParams?: TUrlParams
 }
 
 export interface IGetRequestParams<TUrlParams> extends IRequestParams<TUrlParams> { }
