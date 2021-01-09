@@ -12,7 +12,6 @@ namespace FileDriveWebAPI.Data
 
         public FileDriveContext(DbContextOptions<FileDriveContext> options) : base(options)
         {
-            
         }
 
         public DbSet<User> Users { get; set; }
