@@ -15,10 +15,29 @@ namespace FileDriveWebAPI.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<TreeEntity> TreeEntities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            try
+            {
+
+                modelBuilder.Entity<TreeEntity>(entity =>
+                {
+                    entity.HasKey(x => x.Id);
+                    entity.HasOne(d => d.parent)
+                    .WithMany(d => d.Children)
+                    .HasForeignKey(d => d.ParentId)
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.Restrict);
+                    entity.ToTable("Tree_Entities");
+                });
             modelBuilder.Entity<User>().ToTable("Users");
+            } catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

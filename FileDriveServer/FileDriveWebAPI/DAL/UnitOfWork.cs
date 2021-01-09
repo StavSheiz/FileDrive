@@ -11,6 +11,7 @@ namespace FileDriveWebAPI.DAL
     {
         private FileDriveContext context;
         private UserRepository userRepository;
+        private TreeRepository treeRepository;
 
         public UnitOfWork(FileDriveContext context)
         {
@@ -27,6 +28,19 @@ namespace FileDriveWebAPI.DAL
                     this.userRepository = new UserRepository(context);
                 }
                 return userRepository;
+            }
+        }
+
+        public TreeRepository TreeRepository
+        {
+            get
+            {
+                if (this.treeRepository == null)
+                {
+                    this.treeRepository = new TreeRepository(this.context);
+                }
+
+                return this.treeRepository;
             }
         }
 

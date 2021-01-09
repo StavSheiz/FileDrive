@@ -7,10 +7,12 @@ import { Typography, Link, InputAdornment, IconButton, OutlinedInput, InputLabel
 import { Visibility, VisibilityOff, Clear } from '@material-ui/icons/';
 import logo from '../../logo.svg'
 import { LoginLogic } from '../logic/login-logic';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 
-interface ILoginProps {
-    classes: ClassNameMap
+type ILoginProps = RouteComponentProps & {
+    classes: ClassNameMap,
+    history: any
 }
 interface ILoginState {
     password: string,
@@ -75,11 +77,12 @@ class Login extends React.Component<ILoginProps, ILoginState> {
 
     handleSignIn = async () => {
         const { name, password } = this.state;
-        const message = await LoginLogic.signIn(name, password);
-
-        if (message) {
-            this.setState({ ...this.state, showErrorMessage: true, errorMessage: message, password: '' });
-        }
+            const message = await LoginLogic.signIn(name, password);
+            if (message) {
+                this.setState({ ...this.state, showErrorMessage: true, errorMessage: message, password: '' });
+            } else {
+                this.props.history.push('/tree');
+            }
     }
 
     handleClickCloseError = () => {
@@ -95,7 +98,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                 <div className={classes.root}>
                     <Grid container direction="column" spacing={3} className={classes.container}>
                         <Grid item>
-                            <img src={logo} className={classes.logo} />
+                            <img alt={'loading logo...'} src={logo} className={classes.logo} />
                         </Grid>
                         <Grid item>
                             <Typography variant="h6">Sign in to FileDrive</Typography>
@@ -191,4 +194,4 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Login);
+export default withRouter(withStyles(styles, { withTheme: true })(Login))

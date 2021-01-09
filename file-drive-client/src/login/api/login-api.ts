@@ -1,4 +1,3 @@
-import { User } from './../../modules/User';
 import { appConfig } from './../../appConfig';
 import { IAddUserRequestParams, IAddUserRequestData, ISignInRequestParams, ISignOutRequestParams } from './interfaces/login-request-interfaces';
 import { AxiosRequest } from './../../utils/api/axios-request';
