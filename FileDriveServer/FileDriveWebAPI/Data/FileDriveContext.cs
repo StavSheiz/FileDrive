@@ -33,7 +33,7 @@ namespace FileDriveWebAPI.Data
                     entity.ToTable("Tree_Entities");
                 });
 
-            modelBuilder.Entity<User>().ToTable("Users");
+                modelBuilder.Entity<User>().ToTable("Users");
             } catch (Exception e)
             {
                 Console.WriteLine(e.Message);
