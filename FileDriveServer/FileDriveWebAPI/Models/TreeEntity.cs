@@ -12,6 +12,8 @@ namespace FileDriveWebAPI.Models
         public List<TreeEntity>? Children { get; set; }
         public TreeEntity? parent { get; set; }
         public int? ParentId { get; set; }
+
+        public User owner { get; set; }
         //[NotMapped]
         //public bool IsFile
         //{

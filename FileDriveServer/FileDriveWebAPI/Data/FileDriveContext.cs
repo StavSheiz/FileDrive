@@ -32,6 +32,7 @@ namespace FileDriveWebAPI.Data
                     .OnDelete(DeleteBehavior.Restrict);
                     entity.ToTable("Tree_Entities");
                 });
+
             modelBuilder.Entity<User>().ToTable("Users");
             } catch (Exception e)
             {
