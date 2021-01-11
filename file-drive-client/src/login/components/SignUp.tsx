@@ -7,10 +7,13 @@ import { Typography, InputAdornment, IconButton, OutlinedInput, InputLabel, Form
 import { Visibility, VisibilityOff, Clear } from '@material-ui/icons/';
 import logo from '../../logo.svg'
 import { LoginLogic } from '../logic/login-logic';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 
-interface ISignUpProps {
-    classes: ClassNameMap
+
+type ISignUpProps = RouteComponentProps & {
+    classes: ClassNameMap,
+    history: any
 }
 interface ISignUpState {
     password: string,
@@ -84,6 +87,8 @@ class SignUp extends React.Component<ISignUpProps, ISignUpState> {
 
         if (message) {
             this.setState({ ...this.state, showErrorMessage: true, errorMessage: message, password: '', confirmPassword: '' });
+        } else {
+            this.props.history.push('/login');
         }
     }
 
@@ -218,4 +223,4 @@ class SignUp extends React.Component<ISignUpProps, ISignUpState> {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(SignUp);
+export default withRouter(withStyles(styles, { withTheme: true })(SignUp));

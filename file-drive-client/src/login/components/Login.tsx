@@ -77,16 +77,20 @@ class Login extends React.Component<ILoginProps, ILoginState> {
 
     handleSignIn = async () => {
         const { name, password } = this.state;
-            const message = await LoginLogic.signIn(name, password);
-            if (message) {
-                this.setState({ ...this.state, showErrorMessage: true, errorMessage: message, password: '' });
-            } else {
-                this.props.history.push('/tree');
-            }
+        const message = await LoginLogic.signIn(name, password);
+        if (message) {
+            this.setState({ ...this.state, showErrorMessage: true, errorMessage: message, password: '' });
+        } else {
+            this.props.history.push('/tree');
+        }
     }
 
     handleClickCloseError = () => {
         this.setState({ ...this.state, showErrorMessage: false, errorMessage: '' })
+    }
+
+    handleCreateAccount = () => {
+        this.props.history.push('/signup');
     }
 
     render() {
@@ -183,7 +187,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                         <Grid item>
                             <Paper className={classes.newAccountPaper}>
                                 <Typography variant="body1">
-                                    New to FileDrive? <Link href="#" > Create an account. </Link> {/* TODO: Redirect to create account */}
+                                    New to FileDrive? <Link onClick={this.handleCreateAccount} > Create an account. </Link> {/* TODO: Redirect to create account */}
                                 </Typography>
                             </Paper>
                         </Grid>

@@ -1,7 +1,7 @@
 import { loginErrorMessage } from './login-error-messages';
 import { LoginAPI } from './../api/login-api';
 import { ENUMExceptionCodes } from '../../enums/ENUMExceptionCodes';
-import { UserService } from '../../utils/user-service/UserService';
+import { UserService } from './user-service';
 
 
 export class LoginLogic {
@@ -26,7 +26,7 @@ export class LoginLogic {
             return message;
         }
 
-        UserService.setCurrentUser({name})
+        UserService.setCurrentUser({ name })
     }
 
     public static async signOut() {
@@ -45,7 +45,7 @@ export class LoginLogic {
             return message;
         }
 
-        // TODO: Redirect to login
+        UserService.setCurrentUser({})
     }
 
     public static async signUp(name: string, password: string, confirmPassword: string) {
