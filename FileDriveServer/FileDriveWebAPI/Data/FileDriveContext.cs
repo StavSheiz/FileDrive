@@ -16,6 +16,7 @@ namespace FileDriveWebAPI.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<TreeEntity> TreeEntities { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,7 +26,7 @@ namespace FileDriveWebAPI.Data
                 modelBuilder.Entity<TreeEntity>(entity =>
                 {
                     entity.HasKey(x => x.Id);
-                    entity.HasOne(d => d.parent)
+                    entity.HasOne(d => d.Parent)
                     .WithMany(d => d.Children)
                     .HasForeignKey(d => d.ParentId)
                     .IsRequired(false)
@@ -34,6 +35,8 @@ namespace FileDriveWebAPI.Data
                 });
 
                 modelBuilder.Entity<User>().ToTable("Users");
+                modelBuilder.Entity<Permission>().ToTable("Permissions");
+
             } catch (Exception e)
             {
                 Console.WriteLine(e.Message);

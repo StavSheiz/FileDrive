@@ -1,5 +1,7 @@
 using FileDriveWebAPI.Data;
+using FileDriveWebAPI.Utils.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -48,23 +50,18 @@ namespace FileDriveWebAPI
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
-            //    .AddCookie(options => 
-            //{
-            //    options.Cookie.IsEssential = true;
-            //    options.Cookie.HttpOnly = true;
-            //    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            //    options.Cookie.SameSite = SameSiteMode.None;
-            //    options.Cookie.Name = CookieAuthenticationDefaults.AuthenticationScheme;
-            //});
+
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
+            addAuthorizationHandlers(services);
+
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("SignedIn", policy =>
+                options.AddPolicy("User", policy =>
                                   policy.RequireClaim(ClaimTypes.SerialNumber));
             });
 
@@ -95,6 +92,11 @@ namespace FileDriveWebAPI
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void addAuthorizationHandlers(IServiceCollection services) 
+        {
+            services.AddTransient<IAuthorizationHandler, TreeEntityEditHandler>();
         }
     }
 }

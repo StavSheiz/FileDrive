@@ -10,9 +10,8 @@ namespace FileDriveWebAPI.Models
         public string Name { get; set; }
         //public byte[] File { get; set; }
         public List<TreeEntity>? Children { get; set; }
-        public TreeEntity? parent { get; set; }
+        public TreeEntity? Parent { get; set; }
         public int? ParentId { get; set; }
-
         public User Owner { get; set; }
         //[NotMapped]
         //public bool IsFile
