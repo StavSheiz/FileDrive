@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FileDriveWebAPI.BL;
 using FileDriveWebAPI.Data;
 using FileDriveWebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ namespace FileDriveWebAPI.Controllers
         }
 
         [HttpGet("tree")]
+        [Authorize(Policy = "User")]
         public Response<TreeEntity[]> GetTree()
         {
             return new Response<TreeEntity[]>(this.bl.GetTree());
