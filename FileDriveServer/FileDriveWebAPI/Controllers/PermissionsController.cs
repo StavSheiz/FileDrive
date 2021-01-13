@@ -31,46 +31,45 @@ namespace FileDriveWebAPI.Controllers
         [Authorize(Policy = "User")]
         public async Task<ActionResult<Response<List<Permission>>>> GetPermissionsAsync(int entityId)
         {
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, treeBL.GetTreeEntity(entityId), new OwnerRequirement());
-
-            if (authorizationResult.Succeeded)
+            try
             {
-                try
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, treeBL.GetTreeEntity(entityId), new OwnerRequirement());
+
+                if (authorizationResult.Succeeded)
                 {
                     return new Response<List<Permission>>(permissionsBL.GetAllPermissionsForEntity(entityId));
                 }
-                catch (Exception ex)
+                else
                 {
-                    return new Response<List<Permission>>(ex);
+                    return new ForbidResult();
                 }
             }
-            else 
+            catch (Exception ex)
             {
-                return new ForbidResult();
+                return new Response<List<Permission>>(ex);
             }
-
         }
 
         [HttpPost("add")]
         [Authorize(Policy = "User")]
         public async Task<ActionResult<Response<bool>>> AddPermissionAsync(AddPermissionParameters parameters)
         {
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, treeBL.GetTreeEntity(parameters.entityId), new OwnerRequirement());
-
-            if (authorizationResult.Succeeded)
+            try
             {
-                try
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, treeBL.GetTreeEntity(parameters.entityId), new OwnerRequirement());
+
+                if (authorizationResult.Succeeded)
                 {
                     return new Response<bool>(permissionsBL.AddPermission(parameters.userId, parameters.entityId, parameters.permissionType));
                 }
-                catch (Exception ex)
+                else
                 {
-                    return new Response<bool>(false, ex);
+                    return new ForbidResult();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return new ForbidResult();
+                return new Response<bool>(false, ex);
             }
         }
 
@@ -78,22 +77,22 @@ namespace FileDriveWebAPI.Controllers
         [Authorize(Policy = "User")]
         public async Task<ActionResult<Response<bool>>> UpdatePermissionAsync(int permissionId, ENUMPermissionType permissionType)
         {
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, permissionsBL.GetPermission(permissionId).Entity, new OwnerRequirement());
-
-            if (authorizationResult.Succeeded)
+            try
             {
-                try
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, permissionsBL.GetPermission(permissionId).Entity, new OwnerRequirement());
+
+                if (authorizationResult.Succeeded)
                 {
                     return new Response<bool>(permissionsBL.UpdatePermission(permissionId, permissionType));
                 }
-                catch (Exception ex)
+                else
                 {
-                    return new Response<bool>(false, ex);
+                    return new ForbidResult();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return new ForbidResult();
+                return new Response<bool>(false, ex);
             }
         }
 
@@ -101,22 +100,22 @@ namespace FileDriveWebAPI.Controllers
         [Authorize(Policy = "User")]
         public async Task<ActionResult<Response<bool>>> DeletePermissionAsync(int permissionId)
         {
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, permissionsBL.GetPermission(permissionId).Entity, new OwnerRequirement());
-
-            if (authorizationResult.Succeeded)
+            try
             {
-                try
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, permissionsBL.GetPermission(permissionId).Entity, new OwnerRequirement());
+
+                if (authorizationResult.Succeeded)
                 {
                     return new Response<bool>(permissionsBL.DeletePermission(permissionId));
                 }
-                catch (Exception ex)
+                else
                 {
-                    return new Response<bool>(false, ex);
+                    return new ForbidResult();
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return new ForbidResult();
+                return new Response<bool>(false, ex);
             }
         }
 

@@ -20,7 +20,14 @@ namespace FileDriveWebAPI.BL
 
         public Permission GetPermission(int permissionId) 
         {
-            return this.unitOfWork.PermissionRepository.GetByID(permissionId);
+            Permission permission =  this.unitOfWork.PermissionRepository.GetByID(permissionId);
+
+            if (permission == null) 
+            {
+                throw new ObjectDoesNotExistException();
+            }
+
+            return permission;
         }
 
         public bool AddPermission(int userId, int entityId, ENUMPermissionType permissionType) 
@@ -50,6 +57,11 @@ namespace FileDriveWebAPI.BL
         public bool UpdatePermission(int permissionId, ENUMPermissionType permissionType) 
         {
             Permission permission = this.unitOfWork.PermissionRepository.GetByID(permissionId);
+
+            if (permission == null) 
+            {
+                throw new ObjectDoesNotExistException();
+            }
             permission.PermissionType = permissionType;
 
             this.unitOfWork.PermissionRepository.Update(permission);

@@ -29,7 +29,7 @@ namespace FileDriveWebAPI.BL
 
             if (user == null)
             {
-                throw new UserDoesNotExistException();
+                throw new ObjectDoesNotExistException();
             }
 
             var claims = new List<Claim>
