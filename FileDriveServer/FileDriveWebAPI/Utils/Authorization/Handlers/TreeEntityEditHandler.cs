@@ -1,6 +1,7 @@
 ﻿using FileDriveWebAPI.BL;
 using FileDriveWebAPI.Data;
 using FileDriveWebAPI.Models;
+using FileDriveWebAPI.Utils.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace FileDriveWebAPI.Utils.Authorization
+namespace FileDriveWebAPI.Utils.Authorization.Handlers
 {
     public class TreeEntityEditHandler : AuthorizationHandler<EditRequirement, TreeEntity>
     {

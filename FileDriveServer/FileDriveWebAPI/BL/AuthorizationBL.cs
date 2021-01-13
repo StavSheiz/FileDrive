@@ -15,15 +15,20 @@ namespace FileDriveWebAPI.BL
 
         public bool HasEditPermissions(ClaimsPrincipal user, TreeEntity resource)
         {
-            return this.IsOwner(user, resource) || this.IsAdmin(user) || this.hasEditPermissionsOnResource(user, resource);
+            return this.isOwner(user, resource) || this.isAdmin(user) || this.hasEditPermissionsOnResource(user, resource);
         }
 
-        public bool IsOwner(ClaimsPrincipal user, TreeEntity resource)
+        public bool HasOwnerPermissions(ClaimsPrincipal user, TreeEntity resource) 
+        {
+            return this.isOwner(user, resource) || this.isAdmin(user);
+        }
+
+        private bool isOwner(ClaimsPrincipal user, TreeEntity resource)
         {
             return user.FindFirst(ClaimTypes.Name).Value == resource.Owner.Id.ToString();
         }
 
-        public bool IsAdmin(ClaimsPrincipal user) 
+        private bool isAdmin(ClaimsPrincipal user) 
         {
             return user.FindFirst(ClaimTypes.Role).Value == ENUMUserType.Admin.ToString();
         }

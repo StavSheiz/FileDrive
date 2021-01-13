@@ -1,5 +1,6 @@
 using FileDriveWebAPI.Data;
 using FileDriveWebAPI.Utils.Authorization;
+using FileDriveWebAPI.Utils.Authorization.Handlers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -97,6 +98,8 @@ namespace FileDriveWebAPI
         private void addAuthorizationHandlers(IServiceCollection services) 
         {
             services.AddTransient<IAuthorizationHandler, TreeEntityEditHandler>();
+            services.AddTransient<IAuthorizationHandler, PermissionsEditHandler>();
+
         }
     }
 }

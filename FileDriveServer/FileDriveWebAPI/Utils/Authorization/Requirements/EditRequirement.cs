@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FileDriveWebAPI.Utils.Authorization
+namespace FileDriveWebAPI.Utils.Authorization.Requirements
 {
     public class EditRequirement : IAuthorizationRequirement
     {

@@ -20,7 +20,7 @@ namespace FileDriveWebAPI.Controllers
         }
 
         [HttpGet("signIn")]
-        public async Task<Response<bool>> SignInAsync(string name, string password) 
+        public async Task<ActionResult<Response<bool>>> SignInAsync(string name, string password) 
         {
             try
             {
@@ -33,7 +33,7 @@ namespace FileDriveWebAPI.Controllers
         }
 
         [HttpGet("signOut")]
-        public async Task<Response<bool>> SignOutAsync()
+        public async Task<ActionResult<Response<bool>>> SignOutAsync()
         {
             try
             {
@@ -46,7 +46,7 @@ namespace FileDriveWebAPI.Controllers
         }
 
         [HttpPost]
-        public Response<bool> AddUser([FromBody] AddUserParameters parameters) 
+        public ActionResult<Response<bool>> AddUser([FromBody] AddUserParameters parameters) 
         {
             try
             {
