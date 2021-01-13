@@ -1,7 +1,7 @@
 export enum ENUMExceptionCodes {
     UserNameExists,
     InvalidPassword,
-    UserDoesNotExist,
+    ObjectDoesNotExist,
     InvalidParameters,
     PasswordNotMatching,
     RequestError = -1

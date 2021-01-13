@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace FileDriveWebAPI.Utils.Exceptions
 {
     [Serializable]
-    public class UserDoesNotExistException: BaseException
+    public class ObjectDoesNotExistException: BaseException
     {
-        public UserDoesNotExistException(): base("No user with the given parameters exists") 
+        public ObjectDoesNotExistException(): base("No object with the given parameters exists") 
         {
-            this.setExceptionCode(ENUMExceptionCodes.UserDoesNotExist);
+            this.setExceptionCode(ENUMExceptionCodes.ObjectDoesNotExist);
         }
     }
 }

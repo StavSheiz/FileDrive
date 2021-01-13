@@ -25,7 +25,7 @@ namespace FileDriveWebAPI.Controllers
 
         [HttpGet("tree")]
         [Authorize(Policy = "User")]
-        public Response<TreeEntity[]> GetTree()
+        public ActionResult<Response<TreeEntity[]>> GetTree()
         {
             return new Response<TreeEntity[]>(this.bl.GetTree());
         }

@@ -12,6 +12,7 @@ namespace FileDriveWebAPI.DAL
         private FileDriveContext context;
         private UserRepository userRepository;
         private TreeRepository treeRepository;
+        private PermissionRepository permissionRepository;
 
         public UnitOfWork(FileDriveContext context)
         {
@@ -28,6 +29,18 @@ namespace FileDriveWebAPI.DAL
                     this.userRepository = new UserRepository(context);
                 }
                 return userRepository;
+            }
+        }
+
+        public PermissionRepository PermissionRepository 
+        {
+            get 
+            {
+                if (this.permissionRepository == null)
+                {
+                    this.permissionRepository = new PermissionRepository(context);
+                }
+                return permissionRepository;
             }
         }
 

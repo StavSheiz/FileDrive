@@ -21,5 +21,17 @@ namespace FileDriveWebAPI.BL
         {
             return this.unitOfWork.TreeRepository.Get(x => x.ParentId == null, includeProperties: "Children").ToArray();
         }
+
+        public TreeEntity GetTreeEntity(int entityId)
+        {
+            TreeEntity entity = this.unitOfWork.TreeRepository.GetByID(entityId);
+
+            if (entity == null) 
+            {
+                throw new ObjectDoesNotExistException();
+            }
+
+            return entity;
+        }
     }
 }

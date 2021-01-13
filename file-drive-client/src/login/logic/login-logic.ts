@@ -12,9 +12,9 @@ export class LoginLogic {
             let message;
 
             switch (response.exception.exceptionCode) {
-                case ENUMExceptionCodes.UserDoesNotExist:
+                case ENUMExceptionCodes.ObjectDoesNotExist:
                 case ENUMExceptionCodes.InvalidParameters: {
-                    message = loginErrorMessage[ENUMExceptionCodes.UserDoesNotExist];
+                    message = loginErrorMessage[ENUMExceptionCodes.ObjectDoesNotExist];
                     break;
                 }
                 default: {
