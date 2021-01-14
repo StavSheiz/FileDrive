@@ -1,3 +1,4 @@
+import { User } from './../../models/User';
 import { appConfig } from './../../appConfig';
 import { IAddUserRequestParams, IAddUserRequestData, ISignInRequestParams, ISignOutRequestParams } from './interfaces/login-request-interfaces';
 import { AxiosRequest } from './../../utils/api/axios-request';
@@ -6,7 +7,7 @@ export class LoginAPI {
     private constructor() { }
 
     public static async signIn(name: string, password: string) {
-        const response = await AxiosRequest.get<ISignInRequestParams, boolean>({
+        const response = await AxiosRequest.get<ISignInRequestParams, User>({
             url: appConfig.baseUrl + "/api/login/signIn",
             urlParams: { name, password }
         });

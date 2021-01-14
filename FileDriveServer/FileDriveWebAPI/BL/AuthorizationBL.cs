@@ -25,7 +25,8 @@ namespace FileDriveWebAPI.BL
 
         private bool isOwner(ClaimsPrincipal user, TreeEntity resource)
         {
-            return user.FindFirst(ClaimTypes.Name).Value == resource.Owner.Id.ToString();
+            TreeEntity tree = this.unitOfWork.TreeRepository.Get(tree => tree.Id == resource.Id, includeProperties: "Owner").FirstOrDefault();
+            return user.FindFirst(ClaimTypes.SerialNumber).Value == tree.Owner.Id.ToString();
         }
 
         private bool isAdmin(ClaimsPrincipal user) 
@@ -35,7 +36,9 @@ namespace FileDriveWebAPI.BL
 
         private bool hasEditPermissionsOnResource(ClaimsPrincipal user, TreeEntity resource) 
         {
-            return true;
+            int userId = Convert.ToInt32(user.FindFirst(ClaimTypes.SerialNumber).Value);
+
+            return this.unitOfWork.PermissionRepository.HasPermissions(resource.Id, userId, ENUMPermissionType.Edit);
         }
     }
 }

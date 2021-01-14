@@ -114,7 +114,6 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                                     <Typography variant="body2" className={classes.errorText}>{errorMessage}
                                         <IconButton
                                             onClick={this.handleClickCloseError}
-                                            onMouseDown={this.handleMouseDownPassword}
                                             aria-label="close error message"
                                             edge="end"
                                         >

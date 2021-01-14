@@ -15,12 +15,12 @@ namespace FileDriveWebAPI.BL
 
         public List<Permission> GetAllPermissionsForEntity(int entityId) 
         {
-            return this.unitOfWork.PermissionRepository.Get(permission => permission.Entity.Id == entityId).ToList();
+            return this.unitOfWork.PermissionRepository.Get(permission => permission.Entity.Id == entityId, includeProperties: "User,Entity").ToList();
         }
 
         public Permission GetPermission(int permissionId) 
         {
-            Permission permission =  this.unitOfWork.PermissionRepository.GetByID(permissionId);
+            Permission permission =  this.unitOfWork.PermissionRepository.Get(permission => permission.Id == permissionId, includeProperties: "User,Entity").FirstOrDefault();
 
             if (permission == null) 
             {
@@ -28,6 +28,11 @@ namespace FileDriveWebAPI.BL
             }
 
             return permission;
+        }
+
+        public List<User> GetUsers() 
+        {
+            return this.unitOfWork.UserRepository.Get().ToList();
         }
 
         public bool AddPermission(int userId, int entityId, ENUMPermissionType permissionType) 
@@ -40,11 +45,12 @@ namespace FileDriveWebAPI.BL
                 throw new InvalidParametersException();
             }
 
-            Permission permission = this.unitOfWork.PermissionRepository.Get(permission => permission.Entity.Id == entityId && permission.User.Id == userId).First();
+            Permission permission = this.unitOfWork.PermissionRepository.Get(permission => permission.Entity.Id == entityId && permission.User.Id == userId).FirstOrDefault();
 
             if (permission == null)
             {
                 this.unitOfWork.PermissionRepository.Insert(new Permission { User = user, Entity = entity, PermissionType = permissionType });
+                this.unitOfWork.Save();
             }
             else 
             {
@@ -65,6 +71,7 @@ namespace FileDriveWebAPI.BL
             permission.PermissionType = permissionType;
 
             this.unitOfWork.PermissionRepository.Update(permission);
+            this.unitOfWork.Save();
 
             return true;
         }
@@ -72,6 +79,7 @@ namespace FileDriveWebAPI.BL
         public bool DeletePermission(int permissionId) 
         {
             this.unitOfWork.PermissionRepository.Delete(permissionId);
+            this.unitOfWork.Save();
 
             return true;
         }

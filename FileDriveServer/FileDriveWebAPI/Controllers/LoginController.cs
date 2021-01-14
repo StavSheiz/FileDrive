@@ -20,15 +20,15 @@ namespace FileDriveWebAPI.Controllers
         }
 
         [HttpGet("signIn")]
-        public async Task<ActionResult<Response<bool>>> SignInAsync(string name, string password) 
+        public async Task<ActionResult<Response<User>>> SignInAsync(string name, string password) 
         {
             try
             {
-                return new Response<bool>((await loginBL.SignInAsync(this.HttpContext, name, password)));
+                return new Response<User>((await loginBL.SignInAsync(this.HttpContext, name, password)));
             }
             catch (Exception ex) 
             {
-                return new Response<bool>(false, ex);
+                return new Response<User>(ex);
             }
         }
 

@@ -26,7 +26,7 @@ export class LoginLogic {
             return message;
         }
 
-        UserService.setCurrentUser({ name })
+        response.data && UserService.setCurrentUser(response.data)
     }
 
     public static async signOut() {
@@ -45,7 +45,7 @@ export class LoginLogic {
             return message;
         }
 
-        UserService.setCurrentUser({})
+        UserService.removeUser()
     }
 
     public static async signUp(name: string, password: string, confirmPassword: string) {
