@@ -1,12 +1,12 @@
 import React from 'react';
-import { Theme, withStyles, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, IconButton, Select, MenuItem } from "@material-ui/core";
+import { Theme, withStyles, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, IconButton, Select, MenuItem, Typography, fade } from "@material-ui/core";
 import { IBaseModalProps } from '../../interfaces/modal-interafaces';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { ITreeEntity } from '../../interfaces/ITreeEntity';
 import { PermissionsLogic } from '../../logic/permissions-logic';
 import { Permission } from '../../../models/Permission';
 import { ENUMPermissionType } from '../../../enums/ENUMPermissionType';
-import { Delete, Edit, Add } from '@material-ui/icons';
+import { Delete, Edit, Add, Clear } from '@material-ui/icons';
 import { User } from '../../../models/User';
 import { ENUMUserType } from '../../../enums/ENUMUserType';
 import { UserService } from '../../../login/logic/user-service';
@@ -22,7 +22,8 @@ interface IEditPermissionsModalState {
     users: User[],
     errorMessage: string,
     selectedUser: User | null,
-    selectedPermissionType: ENUMPermissionType
+    selectedPermissionType: ENUMPermissionType,
+    showErrorMessage: boolean
 }
 
 const styles = (theme: Theme) => ({
@@ -33,6 +34,10 @@ const styles = (theme: Theme) => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    errorPaper: {
+        backgroundColor: '#cb2431',
+        padding: theme.spacing(1),
+    }
 });
 
 class EditPermissionsModal extends React.Component<IEditPermissionsModalProps, IEditPermissionsModalState> {
@@ -41,7 +46,8 @@ class EditPermissionsModal extends React.Component<IEditPermissionsModalProps, I
         users: [],
         errorMessage: "",
         selectedUser: { id: -1, name: '', userType: ENUMUserType.Normal },
-        selectedPermissionType: ENUMPermissionType.View
+        selectedPermissionType: ENUMPermissionType.View,
+        showErrorMessage: false
     }
 
     getModalStyle = () => {
@@ -58,7 +64,7 @@ class EditPermissionsModal extends React.Component<IEditPermissionsModalProps, I
             const response = await PermissionsLogic.getPermissions(this.props.entity);
 
             if (response.message) {
-                this.setState({ errorMessage: response.message });
+                this.setState({ errorMessage: response.message, showErrorMessage: true });
             } else if (response.data) {
                 this.setState({ permissions: response.data })
                 this.setState({ users: this.state.users.filter(this.userExistsInPermissions(response.data)) })
@@ -70,7 +76,7 @@ class EditPermissionsModal extends React.Component<IEditPermissionsModalProps, I
         const response = await PermissionsLogic.getUsers();
 
         if (response.message) {
-            this.setState({ errorMessage: response.message });
+            this.setState({ errorMessage: response.message, showErrorMessage: true });
         } else if (response.data) {
             this.setState({ users: response.data.filter(this.userExistsInPermissions(this.state.permissions)) })
         }
@@ -103,7 +109,7 @@ class EditPermissionsModal extends React.Component<IEditPermissionsModalProps, I
         const message = await PermissionsLogic.DeletePermission(permission)
 
         if (message) {
-            this.setState({ errorMessage: message });
+            this.setState({ errorMessage: message, showErrorMessage: true });
         } else {
             this.getPermissions();
         }
@@ -113,7 +119,7 @@ class EditPermissionsModal extends React.Component<IEditPermissionsModalProps, I
         const message = await PermissionsLogic.EditPermission(permission)
 
         if (message) {
-            this.setState({ errorMessage: message });
+            this.setState({ errorMessage: message, showErrorMessage: true });
         } else {
             this.getPermissions();
         }
@@ -124,19 +130,36 @@ class EditPermissionsModal extends React.Component<IEditPermissionsModalProps, I
             const message = await PermissionsLogic.AddPermission(this.state.selectedUser, this.props.entity, this.state.selectedPermissionType);
 
             if (message) {
-                this.setState({ errorMessage: message });
+                this.setState({ errorMessage: message, showErrorMessage: true });
             } else {
                 this.getPermissions();
             }
         }
     }
 
+    handleClickCloseError = () => {
+        this.setState({ ...this.state, showErrorMessage: false, errorMessage: '' })
+    }
+
     render() {
         const { entity, classes } = this.props;
-        const { permissions, selectedUser, selectedPermissionType, users } = this.state;
+        const { permissions, selectedUser, selectedPermissionType, users, showErrorMessage, errorMessage } = this.state;
 
         return (
             <div style={{ ...(this.getModalStyle()), position: 'absolute' }}>
+                {showErrorMessage &&
+                    <Paper className={classes.errorPaper}>
+                        <Typography variant="body2" className={classes.errorText}>{errorMessage}
+                            <IconButton
+                                onClick={this.handleClickCloseError}
+                                aria-label="close error message"
+                                edge="end"
+                            >
+                                <Clear />
+                            </IconButton>
+                        </Typography>
+                    </Paper>
+                }
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
