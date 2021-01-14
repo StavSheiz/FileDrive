@@ -24,7 +24,7 @@ namespace FileDriveWebAPI.BL
 
         public TreeEntity GetTreeEntity(int entityId)
         {
-            TreeEntity entity = this.unitOfWork.TreeRepository.GetByID(entityId);
+            TreeEntity entity = this.unitOfWork.TreeRepository.Get(entity => entity.Id == entityId, includeProperties: "Owner").FirstOrDefault();
 
             if (entity == null) 
             {

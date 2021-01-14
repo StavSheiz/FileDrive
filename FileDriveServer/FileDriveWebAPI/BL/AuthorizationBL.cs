@@ -25,7 +25,8 @@ namespace FileDriveWebAPI.BL
 
         private bool isOwner(ClaimsPrincipal user, TreeEntity resource)
         {
-            return user.FindFirst(ClaimTypes.Name).Value == resource.Owner.Id.ToString();
+            TreeEntity tree = this.unitOfWork.TreeRepository.Get(tree => tree.Id == resource.Id, includeProperties: "Owner").FirstOrDefault();
+            return user.FindFirst(ClaimTypes.SerialNumber).Value == tree.Owner.Id.ToString();
         }
 
         private bool isAdmin(ClaimsPrincipal user) 

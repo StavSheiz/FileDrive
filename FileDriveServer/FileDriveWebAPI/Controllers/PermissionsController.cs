@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace FileDriveWebAPI.Controllers
 {
+    [Route("api/[controller]")]
     public class PermissionsController : Controller
     {
         private PermissionsBL permissionsBL;
@@ -50,9 +51,23 @@ namespace FileDriveWebAPI.Controllers
             }
         }
 
+        [HttpGet("getUsers")]
+        [Authorize(Policy = "User")]
+        public ActionResult<Response<List<User>>> GetUsers(int entityId)
+        {
+            try
+            {
+                return new Response<List<User>>(permissionsBL.GetUsers());
+            }
+            catch (Exception ex)
+            {
+                return new Response<List<User>>(ex);
+            }
+        }
+
         [HttpPost("add")]
         [Authorize(Policy = "User")]
-        public async Task<ActionResult<Response<bool>>> AddPermissionAsync(AddPermissionParameters parameters)
+        public async Task<ActionResult<Response<bool>>> AddPermissionAsync([FromBody]AddPermissionParameters parameters)
         {
             try
             {

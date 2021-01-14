@@ -5,7 +5,7 @@ export interface IOpenModalParams {
     modalType: ENUMModalType
 }
 
-export interface IBaseModalInterface {
+export interface IBaseModalProps {
     entity: ITreeEntity | null,
     closeModal: () => void
 }
