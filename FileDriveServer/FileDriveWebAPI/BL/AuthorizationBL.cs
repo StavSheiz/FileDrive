@@ -35,13 +35,9 @@ namespace FileDriveWebAPI.BL
 
         private bool hasEditPermissionsOnResource(ClaimsPrincipal user, TreeEntity resource) 
         {
-            string userId = user.FindFirst(ClaimTypes.SerialNumber).Value;
+            int userId = Convert.ToInt32(user.FindFirst(ClaimTypes.SerialNumber).Value);
 
-            return this.unitOfWork.PermissionRepository.Get(permission => 
-                        permission.Entity.Id == resource.Id && 
-                        permission.User.Id.ToString() == userId && 
-                        permission.PermissionType == ENUMPermissionType.Edit
-                    ).Any();
+            return this.unitOfWork.PermissionRepository.HasPermissions(resource.Id, userId, ENUMPermissionType.Edit);
         }
     }
 }

@@ -7,7 +7,7 @@ import {
   Route,
   Redirect
 } from 'react-router-dom'
-import FilesTree from './files-tree/FilesTree';
+import FilesTree from './files-tree/components/FilesTree';
 import { UserService } from './login/logic/user-service';
 import SignUp from './login/components/SignUp';
 

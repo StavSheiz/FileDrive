@@ -17,7 +17,7 @@ namespace FileDriveWebAPI.BL
     {
         public LoginBL(FileDriveContext context) : base(context) { }
 
-        public async Task<bool> SignInAsync(HttpContext httpContext, string name, string password) 
+        public async Task<User> SignInAsync(HttpContext httpContext, string name, string password) 
         {
 
             if (name == null || password == null)
@@ -52,7 +52,7 @@ namespace FileDriveWebAPI.BL
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
 
-            return true;
+            return user;
         }
 
         public async Task<bool> SignOutAsync(HttpContext httpContext) 
