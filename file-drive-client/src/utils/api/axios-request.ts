@@ -4,7 +4,7 @@ import { Logger } from '../log/logger';
 import { IGetRequestParams, IPostRequestParams } from './interfaces/request-params-interfaces';
 import axios from 'axios'
 
-const headers = {
+const defaultHeaders = {
     "Access-Control-Allow-Credentials": "*",
     "Content-Type": "application/json"
 }
@@ -23,7 +23,7 @@ export class AxiosRequest {
         }
 
         try {
-            const response = await axios.get(url, { params: urlParams, headers });
+            const response = await axios.get(url, { params: urlParams, headers: defaultHeaders });
 
             if (response.status === 200) {
                 responseData = response.data;
@@ -37,14 +37,14 @@ export class AxiosRequest {
         return responseData;
     }
 
-    public static async post<TUrlParams, TData, TResponseData>({ url, urlParams, data }: IPostRequestParams<TUrlParams, TData>) {
+    public static async post<TUrlParams, TData, TResponseData>({ url, urlParams, data, headers }: IPostRequestParams<TUrlParams, TData>) {
         let responseData: IResponse<TResponseData> = {
             data: null,
             exception: { message: "Error in post request", exceptionCode: ENUMExceptionCodes.RequestError }
         }
 
         try {
-            const response = await axios.post(url, data, { params: urlParams, headers });
+            const response = await axios.post(url, data, { params: urlParams, headers: headers ? {...defaultHeaders, ...headers} : defaultHeaders });
 
             if (response.status === 200) {
                 responseData = response.data;

@@ -10,8 +10,13 @@ import {
 import FilesTree from './files-tree/components/FilesTree';
 import { UserService } from './login/logic/user-service';
 import SignUp from './login/components/SignUp';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import useErrorContext from './errors/ErrorContext';
 
 function App() {
+  const {error, setError} = useErrorContext()
+  
   return (
     <div className="App">
       <Router>
@@ -32,7 +37,9 @@ function App() {
             : undefined
         }
       </Router>
-
+      <Snackbar open={error !== null} autoHideDuration={1500} onClose={() => setError(null)}>
+            <Alert severity="error">{error}</Alert>
+        </Snackbar>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Theme, withStyles, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, IconButton, Select, MenuItem, Typography, fade } from "@material-ui/core";
+import { Theme, withStyles, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, IconButton, Select, MenuItem, Typography } from "@material-ui/core";
 import { IBaseModalProps } from '../../interfaces/modal-interafaces';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { ITreeEntity } from '../../interfaces/ITreeEntity';

@@ -29,13 +29,13 @@ namespace FileDriveWebAPI.Data
 
             var entities = new TreeEntity[]
             {
-                new TreeEntity{ Name="Photos", ParentId=null },
-                new TreeEntity{ Name="Documents", ParentId=null },
-                new TreeEntity{ Name="Pdf Docs", ParentId=2 },
-                new TreeEntity{ Name="Word Docs", ParentId=2 },
-                new TreeEntity{ Name="Wedding", ParentId=1 },
-                new TreeEntity{ Name="Birthday", ParentId=1 },
-                new TreeEntity{ Name="Bar Mitzvah", ParentId=1 },
+                new TreeEntity{ Name="Photos", ParentId=null, Owner=context.Users.First(x => x.Id == 3)},
+                new TreeEntity{ Name="Documents", ParentId=null, Owner=context.Users.First(x => x.Id == 3) },
+                new TreeEntity{ Name="Pdf Docs", ParentId=2, Owner=context.Users.First(x => x.Id == 3) },
+                new TreeEntity{ Name="Word Docs", ParentId=2, Owner=context.Users.First(x => x.Id == 3) },
+                new TreeEntity{ Name="Wedding", ParentId=1, Owner=context.Users.First(x => x.Id == 3) },
+                new TreeEntity{ Name="Birthday", ParentId=1, Owner=context.Users.First(x => x.Id == 3) },
+                new TreeEntity{ Name="Bar Mitzvah", ParentId=1, Owner=context.Users.First(x => x.Id == 3) },
             };
 
             foreach (TreeEntity entity in entities) 
@@ -84,7 +84,8 @@ namespace FileDriveWebAPI.Data
 
             var Permissions = new Permission[]
             {
-                new Permission { User=getUser(context, 2), Entity=getEntity(context, 1), PermissionType=ENUMPermissionType.Edit }
+                new Permission { User=getUser(context, 2), Entity=getEntity(context, 1), PermissionType=ENUMPermissionType.Edit },
+                new Permission { User=getUser(context, 3), Entity=getEntity(context, 1), PermissionType=ENUMPermissionType.Edit }
             };
 
             foreach (Permission permission in Permissions)
