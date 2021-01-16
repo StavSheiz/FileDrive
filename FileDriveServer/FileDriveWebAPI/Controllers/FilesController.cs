@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using FileDriveWebAPI.BL;
 using FileDriveWebAPI.Data;
 using FileDriveWebAPI.Models;
+using FileDriveWebAPI.Utils.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,10 +20,12 @@ namespace FileDriveWebAPI.Controllers
     public class FilesController : Controller
     {
         private TreeBL bl;
+        private IAuthorizationService authorizationService;
 
-        public FilesController(FileDriveContext context)
+        public FilesController(FileDriveContext context, IAuthorizationService authorizationService)
         {
             this.bl = new TreeBL(context);
+            this.authorizationService = authorizationService;
         }
 
         [HttpGet("tree")]
@@ -29,5 +34,55 @@ namespace FileDriveWebAPI.Controllers
         {
             return new Response<TreeEntity[]>(this.bl.GetTree());
         }
+
+        [HttpPost("addFile")]
+        [Authorize(Policy ="User")]
+        public async Task<ActionResult<Response<TreeEntity>>> AddFile([FromForm]IFormFile uploadedFile, [FromForm]int parentId)
+        {
+            try
+            {
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(parentId), new EditRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    int userId = Convert.ToInt32(this.User.FindFirst(ClaimTypes.SerialNumber).Value);
+                    TreeEntity newTreeEntity = this.bl.AddFile(uploadedFile, parentId, userId);
+                    return new Response<TreeEntity>(newTreeEntity);
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            } catch (Exception ex)
+            {
+                return new Response<TreeEntity>(ex);
+            }
+            
+        }
+
+        [HttpPost("addFolder")]
+        [Authorize(Policy = "User")]
+        public async Task<ActionResult<Response<TreeEntity>>> AddFolder([FromBody]AddFolderDTO folderDetails)
+        {
+            try
+            {
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(folderDetails.parentId), new EditRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    int userId = Convert.ToInt32(this.User.FindFirst(ClaimTypes.SerialNumber).Value);
+                    TreeEntity newTreeEntity = this.bl.AddFolder(folderDetails.folderName, folderDetails.parentId, userId);
+                    return new Response<TreeEntity>(newTreeEntity);
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<TreeEntity>(ex);
+            }
+
+        }
     }
+
 }

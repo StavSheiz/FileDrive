@@ -1,15 +1,9 @@
 ﻿using FileDriveWebAPI.Data;
 using FileDriveWebAPI.Models;
-using FileDriveWebAPI.Utils;
 using FileDriveWebAPI.Utils.Exceptions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FileDriveWebAPI.BL
 {
@@ -19,7 +13,7 @@ namespace FileDriveWebAPI.BL
 
         public TreeEntity[] GetTree()
         {
-            return this.unitOfWork.TreeRepository.Get(x => x.ParentId == null, includeProperties: "Children,Owner").ToArray();
+            return this.unitOfWork.TreeRepository.Get(includeProperties: "Children,Owner").Where(x => x.ParentId == null).ToArray();
         }
 
         public TreeEntity GetTreeEntity(int entityId)
@@ -32,6 +26,55 @@ namespace FileDriveWebAPI.BL
             }
 
             return entity;
+        }
+
+        public TreeEntity AddFile(IFormFile file, int parentId, int userId)
+        {
+            if (parentId == 0 || file == null)
+            {
+                throw new InvalidParametersException();
+            }
+            byte[] fileBytes;
+            using (var ms = new MemoryStream())
+            {
+                file.CopyTo(ms);
+                fileBytes = ms.ToArray();                
+            }
+            User currentUser = this.unitOfWork.UserRepository.GetByID(userId);
+
+            TreeEntity newTreeEntity = new TreeEntity()
+            {
+                Name = file.FileName,
+                File = fileBytes,
+                Owner = currentUser,
+                ParentId = parentId,
+                Size = (int)file.Length
+            };
+
+            this.unitOfWork.TreeRepository.Insert(newTreeEntity);
+            this.unitOfWork.Save();
+            return newTreeEntity;
+        }
+
+        public TreeEntity AddFolder(string folderName, int parentId, int userId)
+        {
+            if (folderName.Length == 0 || parentId == 0)
+            {
+                throw new InvalidParametersException();
+            }
+
+            User currentUser = this.unitOfWork.UserRepository.GetByID(userId);
+
+            TreeEntity newTreeEntity = new TreeEntity()
+            {
+                Name = folderName,
+                Owner = currentUser,
+                ParentId = parentId
+            };
+
+            this.unitOfWork.TreeRepository.Insert(newTreeEntity);
+            this.unitOfWork.Save();
+            return newTreeEntity;
         }
     }
 }

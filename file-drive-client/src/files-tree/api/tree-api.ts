@@ -9,3 +9,28 @@ export const getTree = async () => {
 
         return response.data;
 }
+
+export const addFile = async (form: FormData) => {
+    const response = await AxiosRequest.post<{}, FormData, ITreeEntity>({
+        url: appConfig.baseUrl + "/api/files/addFile",
+        data: form,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    })
+
+    return response
+}
+
+type AddFolderData = {folderName: string, parentId: number}
+export const addFolder = async (folderName: string, parentId: number) => {
+    const response = await AxiosRequest.post<{},AddFolderData, ITreeEntity>({
+        url: appConfig.baseUrl + "/api/files/addFolder",
+        data: {
+            folderName,
+            parentId
+        }        
+    })
+
+    return response
+}

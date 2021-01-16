@@ -8,27 +8,11 @@ namespace FileDriveWebAPI.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        //public byte[] File { get; set; }
         public List<TreeEntity>? Children { get; set; }
         public TreeEntity? Parent { get; set; }
         public int? ParentId { get; set; }
         public User Owner { get; set; }
-        //[NotMapped]
-        //public bool IsFile
-        //{
-        //    get
-        //    {
-        //        return this.File != null;
-        //    }
-        //}
-
-        //[NotMapped]
-        //public bool IsDirectory
-        //{
-        //    get
-        //    {
-        //        return this.File == null;
-        //    }
-        //}
+        public byte[]? File { get; set; }
+        public int? Size { get; set; }
     }
 }
