@@ -29,6 +29,11 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
                         Edit Permissions
                     </MenuItem>
                 }
+                {trigger &&
+                    <MenuItem data={{ entity: trigger.entity, modalType: ENUMModalType.Details }} onClick={this.handleClick}>
+                        Details
+                    </MenuItem>
+                }
             </ContextMenu>
         )
     }

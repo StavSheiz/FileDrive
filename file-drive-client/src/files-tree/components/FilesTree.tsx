@@ -10,12 +10,14 @@ import TreeContextMenu from './contextMenu/TreeContextMenu';
 import CurrentTreeEntity from './CurrentTreeEntity';
 import { AddTreeEntityToTree } from '../helpers/tree-helpers';
 import useErrorContext from '../../errors/ErrorContext';
+import DetailsModal from './modals/DetailsModal';
 
 interface IFilesTreeProps {
 }
 
 const ModalTypes = {
-    [ENUMModalType.EditPermissions]: EditPermissionsModal
+    [ENUMModalType.EditPermissions]: EditPermissionsModal,
+    [ENUMModalType.Details]: DetailsModal
 }
 
 const FilesTree = (props: IFilesTreeProps) => {
@@ -25,7 +27,7 @@ const FilesTree = (props: IFilesTreeProps) => {
     const [open, setOpen] = React.useState(false);
     const [modalBody, setModalBody] = useState<ENUMModalType>(ENUMModalType.EditPermissions);
     const [modalEntity, setModalEntity] = useState<ITreeEntity | null>(null);
-    const {setException} = useErrorContext()
+    const { setException } = useErrorContext()
 
     const onTreeEntitySelect = (entity: ITreeEntity) => {
         setSelectedTreeEntity(entity);
@@ -36,7 +38,7 @@ const FilesTree = (props: IFilesTreeProps) => {
             const formData = new FormData()
             formData.append('uploadedFile', file)
             formData.append('parentId', (selectedTreeEntity as ITreeEntity).id.toString())
-            const {data, exception} = await addFile(formData)
+            const { data, exception } = await addFile(formData)
             if (exception) {
                 setException(exception)
             } else if (data) {
@@ -54,7 +56,7 @@ const FilesTree = (props: IFilesTreeProps) => {
 
     const onAddFolder = async (folderName: string) => {
         try {
-            const {data, exception} = await addFolder(folderName, (selectedTreeEntity as ITreeEntity).id)
+            const { data, exception } = await addFolder(folderName, (selectedTreeEntity as ITreeEntity).id)
 
             if (exception) {
                 setException(exception)

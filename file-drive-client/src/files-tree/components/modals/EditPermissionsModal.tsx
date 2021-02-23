@@ -14,8 +14,6 @@ import { UserService } from '../../../login/logic/user-service';
 
 interface IEditPermissionsModalProps extends IBaseModalProps {
     classes: ClassNameMap,
-    entity: ITreeEntity | null,
-    closeModal: () => void
 }
 interface IEditPermissionsModalState {
     permissions: Permission[],
