@@ -102,7 +102,7 @@ const FilesTree = (props: IFilesTreeProps) => {
                         <SideTree tree={tree} openModal={handleOpen} onTreeItemClick={onTreeEntitySelect} />
                     </Grid>
                     <Grid xs={9}>
-                        <CurrentTreeEntity entity={selectedTreeEntity} onAddFile={onAddFile} onAddFolder={onAddFolder} />
+                        <CurrentTreeEntity openModal={handleOpen} entity={selectedTreeEntity} onAddFile={onAddFile} onAddFolder={onAddFolder} />
                     </Grid>
                 </Grid>
             </Grid>
