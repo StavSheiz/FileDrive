@@ -40,7 +40,7 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
                         Details
                     </MenuItem>
                 }
-                {trigger && trigger.entity &&
+                {trigger && trigger.entity && trigger.entity.file &&
                     < MenuItem data={{ entity: trigger.entity }} onClick={this.handleDuplicate}>
                         Duplicate
                     </MenuItem>
