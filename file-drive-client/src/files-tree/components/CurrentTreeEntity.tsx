@@ -12,6 +12,7 @@ interface ICurrentTreeEntityProps {
     onAddFile: (file: File) => void,
     onAddFolder: (folderName: string) => void
     openModal: (params: IOpenModalParams) => void,
+    handleDuplicate: (entity: ITreeEntity) => void
 }
 
 const styles = (theme: Theme) => ({
@@ -20,7 +21,7 @@ const styles = (theme: Theme) => ({
 
 const CurrentTreeEntity = (props: ICurrentTreeEntityProps) => {
 
-    const { entity, onAddFile, onAddFolder, openModal } = props
+    const { entity, onAddFile, onAddFolder, openModal, handleDuplicate } = props
 
     const collect = (props: any) => {
         return props
@@ -29,9 +30,9 @@ const CurrentTreeEntity = (props: ICurrentTreeEntityProps) => {
 
     return (
         <Grid container justify={"space-around"}>
-            {entity ? entity.children.map(child => {
+            {entity && entity.children ? entity.children.map(child => {
                 return (
-                    <TreeContextMenuTrigger id="context-menu" collect={collect} entity={child} openModal={openModal}>
+                    <TreeContextMenuTrigger id="context-menu" collect={collect} entity={child} handleDuplicate={handleDuplicate} openModal={openModal}>
                         <Grid item xs={3} key={child.id}>
                             {
                                 child.file ? <Description /> : <Folder />

@@ -5,5 +5,6 @@ export enum ENUMExceptionCodes {
     InvalidParameters,
     PasswordNotMatching,
     ObjectAlreadyExists,
+    InvalidEntityType,
     RequestError = -1
 }
