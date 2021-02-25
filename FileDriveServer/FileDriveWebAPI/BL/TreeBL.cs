@@ -127,6 +127,11 @@ namespace FileDriveWebAPI.BL
         {
             TreeEntity parent = this.unitOfWork.TreeRepository.Get(entity => entity.Id == parentId, includeProperties: "Children").FirstOrDefault();
 
+            if (parent == null)
+            {
+                throw new ObjectDoesNotExistException();
+            }
+
             return parent.Children;
         }
     }
