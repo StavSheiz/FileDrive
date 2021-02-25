@@ -2,6 +2,8 @@
 using FileDriveWebAPI.Models;
 using FileDriveWebAPI.Utils.Exceptions;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -75,6 +77,62 @@ namespace FileDriveWebAPI.BL
             this.unitOfWork.TreeRepository.Insert(newTreeEntity);
             this.unitOfWork.Save();
             return newTreeEntity;
+        }
+
+        public TreeEntity DuplicateFile(int entityId, int userId) 
+        {
+            TreeEntity fileToDuplicate = GetTreeEntity(entityId);
+            User currentUser = this.unitOfWork.UserRepository.GetByID(userId);
+
+            if (fileToDuplicate.File == null) 
+            {
+                throw new InvalidEntityTypeException();
+            }
+
+            TreeEntity newFile = new TreeEntity
+            {
+                Name = getNextFilename(fileToDuplicate.Name, fileToDuplicate.ParentId),
+                Owner = currentUser,
+                ParentId = fileToDuplicate.ParentId,
+                File = fileToDuplicate.File,
+                Size = fileToDuplicate.Size
+            };
+
+            this.unitOfWork.TreeRepository.Insert(newFile);
+            this.unitOfWork.Save();
+            return newFile;
+        }
+
+
+
+        public string getNextFilename(string filename, int? parentId)
+        {
+            int i = 1;
+
+            string[] splitName = filename.Split('.');
+            string file = String.Join("",splitName.Take(splitName.Length - 1)) + "{0}";
+            string extension = splitName[splitName.Length - 1];
+
+            int entityId = parentId ?? default(int);
+            List<TreeEntity> siblings = getTreeEntityChildren(entityId);
+
+
+            while (siblings.Exists(file => file.Name == filename))
+                filename = string.Format(file, "(" + i++ + ").") + extension;
+
+            return filename;
+        }
+
+        private List<TreeEntity> getTreeEntityChildren(int parentId) 
+        {
+            TreeEntity parent = this.unitOfWork.TreeRepository.Get(entity => entity.Id == parentId, includeProperties: "Children").FirstOrDefault();
+
+            if (parent == null)
+            {
+                throw new ObjectDoesNotExistException();
+            }
+
+            return parent.Children;
         }
     }
 }
