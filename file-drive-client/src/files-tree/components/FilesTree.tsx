@@ -10,12 +10,16 @@ import TreeContextMenu from './contextMenu/TreeContextMenu';
 import CurrentTreeEntity from './CurrentTreeEntity';
 import { AddTreeEntityToTree } from '../helpers/tree-helpers';
 import useErrorContext from '../../errors/ErrorContext';
+import DeleteEntityModal from './modals/DeleteEntityModal';
+import RenameEntityModal from './modals/RenameEntityModal';
 
 interface IFilesTreeProps {
 }
 
 const ModalTypes = {
-    [ENUMModalType.EditPermissions]: EditPermissionsModal
+    [ENUMModalType.EditPermissions]: EditPermissionsModal,
+    [ENUMModalType.Delete]: DeleteEntityModal,
+    [ENUMModalType.Rename]: RenameEntityModal
 }
 
 const FilesTree = (props: IFilesTreeProps) => {

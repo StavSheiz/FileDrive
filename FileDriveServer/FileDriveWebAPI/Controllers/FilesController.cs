@@ -59,6 +59,29 @@ namespace FileDriveWebAPI.Controllers
             
         }
 
+        [HttpDelete("deleteTreeEntity/{entityId}")]
+        [Authorize(Policy = "User")]
+        public async Task<ActionResult<Response<bool>>> DeleteTreeEntity(int entityId)
+        {
+            try
+            {
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(entityId), new EditRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    return new Response<bool>(this.bl.Delete(entityId));
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool>(false);
+            }
+
+        }
+
         [HttpPost("addFolder")]
         [Authorize(Policy = "User")]
         public async Task<ActionResult<Response<TreeEntity>>> AddFolder([FromBody]AddFolderDTO folderDetails)

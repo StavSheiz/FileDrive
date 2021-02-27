@@ -1,3 +1,5 @@
 export enum ENUMModalType {
-    EditPermissions
+    EditPermissions,
+    Delete,
+    Rename
 }

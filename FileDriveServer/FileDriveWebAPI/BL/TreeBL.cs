@@ -76,5 +76,17 @@ namespace FileDriveWebAPI.BL
             this.unitOfWork.Save();
             return newTreeEntity;
         }
+
+        public bool Delete(int entityId)
+        {
+            int[] entitiesIds = this.unitOfWork.TreeRepository.GetChildrenIds(entityId);
+            foreach (int id in entitiesIds)
+            {
+                this.unitOfWork.TreeRepository.Delete(id);                
+            }
+            this.unitOfWork.Save();
+
+            return true;
+        }
     }
 }

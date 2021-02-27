@@ -34,3 +34,12 @@ export const addFolder = async (folderName: string, parentId: number) => {
 
     return response
 }
+
+export const deleteTreeEntity = async (entityId: number) => {
+    const response = await AxiosRequest.delete<any, any, boolean>({
+        url: appConfig.baseUrl + "/api/files/deleteTreeEntity",
+        id: entityId
+    })
+
+    return response
+}
