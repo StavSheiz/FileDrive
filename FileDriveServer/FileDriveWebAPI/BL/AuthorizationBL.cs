@@ -38,7 +38,8 @@ namespace FileDriveWebAPI.BL
         {
             int userId = Convert.ToInt32(user.FindFirst(ClaimTypes.SerialNumber).Value);
 
-            return this.unitOfWork.PermissionRepository.HasPermissions(resource.Id, userId, ENUMPermissionType.Edit);
+            return this.unitOfWork.PermissionRepository.HasPermissions(resource.Id, userId, ENUMPermissionType.Edit) || 
+                this.unitOfWork.TreeRepository.IsOwnerOfAncestor(resource.Id, userId);
         }
     }
 }
