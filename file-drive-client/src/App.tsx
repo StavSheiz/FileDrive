@@ -15,8 +15,8 @@ import { Alert } from '@material-ui/lab';
 import useErrorContext from './errors/ErrorContext';
 
 function App() {
-  const {error, setError} = useErrorContext()
-  
+  const { error, setError } = useErrorContext()
+
   return (
     <div className="App">
       <Router>
@@ -26,6 +26,9 @@ function App() {
           </Route>
           <Route path="/tree">
             <FilesTree />
+          </Route>
+          <Route path="/">
+            <Redirect to={'/tree'} />
           </Route>
           <Route path="/signup">
             <SignUp />
@@ -38,8 +41,8 @@ function App() {
         }
       </Router>
       <Snackbar open={error !== null} autoHideDuration={1500} onClose={() => setError(null)}>
-            <Alert severity="error">{error}</Alert>
-        </Snackbar>
+        <Alert severity="error">{error}</Alert>
+      </Snackbar>
     </div>
   );
 }
