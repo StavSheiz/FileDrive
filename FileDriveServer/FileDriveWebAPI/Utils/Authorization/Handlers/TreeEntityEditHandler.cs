@@ -11,18 +11,12 @@ using System.Threading.Tasks;
 
 namespace FileDriveWebAPI.Utils.Authorization.Handlers
 {
-    public class TreeEntityEditHandler : AuthorizationHandler<EditRequirement, TreeEntity>
+    public class TreeEntityEditHandler : BaseHandler<EditRequirement, TreeEntity>
     {
-        private AuthorizationBL authorizationBL;
 
-        public TreeEntityEditHandler(FileDriveContext context) 
-        {
-            this.authorizationBL = new AuthorizationBL(context);
-        }
+        public TreeEntityEditHandler(FileDriveContext context) : base(context) { }
 
-        protected override Task HandleRequirementAsync(
-           AuthorizationHandlerContext context,
-           EditRequirement requirement,
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EditRequirement requirement,
            TreeEntity resource)
         {
             if(this.authorizationBL.HasEditPermissions(context.User, resource)) 

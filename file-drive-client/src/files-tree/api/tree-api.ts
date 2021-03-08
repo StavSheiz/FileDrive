@@ -1,4 +1,5 @@
-import { IDuplicateFileRequestParams } from './../interfaces/tree-request-interfaces';
+import { ENUMConverterType } from './../../enums/ENUMConverterType';
+import { IDuplicateFileRequestParams, IConvertFileRequestParams } from './../interfaces/tree-request-interfaces';
 import { appConfig } from "../../appConfig";
 import { AxiosRequest } from "../../utils/api/axios-request";
 import { ITreeEntity } from "../interfaces/ITreeEntity";
@@ -41,6 +42,18 @@ export const duplicateFile = async (fileId: number) => {
         url: appConfig.baseUrl + "/api/files/duplicateFile",
         urlParams: {
             entityId: fileId
+        }
+    })
+
+    return response;
+}
+
+export const convertFile = async (fileId: number, conversionType: ENUMConverterType) => {
+    const response = await AxiosRequest.get<IConvertFileRequestParams, ITreeEntity>({
+        url: appConfig.baseUrl + "/api/files/convertFile",
+        urlParams: {
+            entityId: fileId,
+            type: conversionType
         }
     })
 
