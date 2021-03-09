@@ -45,12 +45,13 @@ namespace FileDriveWebAPI.BL
 
             FileConverter converter = factory.GetConverter();
 
-            TreeEntity newFile = converter.Convert(file);
+            file.File = converter.Convert(file);
+            file.Name = converter.getNewFileName(file.Name);
 
-            this.unitOfWork.TreeRepository.Update(newFile);
+            this.unitOfWork.TreeRepository.Update(file);
             this.unitOfWork.Save();
 
-            return newFile;
+            return file;
         }
     }
 }

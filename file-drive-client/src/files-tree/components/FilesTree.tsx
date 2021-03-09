@@ -8,9 +8,11 @@ import EditPermissionsModal from './modals/EditPermissionsModal';
 import { IOpenModalParams } from '../interfaces/modal-interafaces';
 import TreeContextMenu from './contextMenu/TreeContextMenu';
 import CurrentTreeEntity from './CurrentTreeEntity';
-import { AddTreeEntityToTree } from '../helpers/tree-helpers';
+import { AddTreeEntityToTree, UpdateTreeEntity } from '../helpers/tree-helpers';
 import useErrorContext from '../../errors/ErrorContext';
 import DetailsModal from './modals/DetailsModal';
+import { ENUMConverterType } from '../../enums/ENUMConverterType';
+import { ConversionLogic } from '../logic/conversion-logic';
 
 interface IFilesTreeProps {
 }
@@ -94,6 +96,27 @@ const FilesTree = (props: IFilesTreeProps) => {
         }
     }
 
+    const handleConvert = async (entity: ITreeEntity, conversionType: ENUMConverterType) => {
+        try {
+
+            const { data, exception } = await ConversionLogic.convertFile(entity.id, conversionType);;
+
+            if (exception) {
+                setException(exception)
+            } else if (data) {
+                const entityToUpdate = data
+                setTree(prevTree => {
+                    let newTree = [...(prevTree as ITreeEntity[])]
+                    newTree.forEach(child => UpdateTreeEntity(child, entityToUpdate))
+                    return newTree
+                })
+            }
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const handleOpen = ({ entity, modalType }: IOpenModalParams) => {
         setModalBody(modalType);
         setModalEntity(entity);
@@ -120,10 +143,10 @@ const FilesTree = (props: IFilesTreeProps) => {
                 </Grid>
                 <Grid container item xs={12}>
                     <Grid xs={3}>
-                        <SideTree tree={tree} openModal={handleOpen} handleDuplicate={handleDuplicate} onTreeItemClick={onTreeEntitySelect} />
+                        <SideTree tree={tree} openModal={handleOpen} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onTreeItemClick={onTreeEntitySelect} />
                     </Grid>
                     <Grid xs={9}>
-                        <CurrentTreeEntity openModal={handleOpen} entity={selectedTreeEntity} handleDuplicate={handleDuplicate} onAddFile={onAddFile} onAddFolder={onAddFolder} />
+                        <CurrentTreeEntity openModal={handleOpen} entity={selectedTreeEntity} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onAddFile={onAddFile} onAddFolder={onAddFolder} />
                     </Grid>
                 </Grid>
             </Grid>

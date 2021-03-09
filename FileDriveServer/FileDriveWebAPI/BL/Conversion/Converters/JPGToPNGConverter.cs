@@ -15,7 +15,7 @@ namespace FileDriveWebAPI.BL.Conversion.Converters
     {
         public JPGToPNGConverter() : base(ENUMConverterType.JPGToPNG, "png") { }
 
-        public override TreeEntity Convert(TreeEntity file)
+        public override byte[] Convert(TreeEntity file)
         {
             Image pngImage = null;
             byte[] pngImageBytes = null;
@@ -44,7 +44,7 @@ namespace FileDriveWebAPI.BL.Conversion.Converters
                 throw new ConversionFailedException("jpg", "png");
             }
 
-            return GetNewFile(file, pngImageBytes);
+            return pngImageBytes;
         }
     }
 }

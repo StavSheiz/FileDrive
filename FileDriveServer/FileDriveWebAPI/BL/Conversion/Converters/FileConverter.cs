@@ -18,22 +18,9 @@ namespace FileDriveWebAPI.BL.Conversion.Converters
             this.extension = extension;
         }
         public ENUMConverterType Type { get { return type; } }
-        public abstract TreeEntity Convert(TreeEntity file);
+        public abstract byte[] Convert(TreeEntity file);
 
-        protected TreeEntity GetNewFile(TreeEntity file, byte[] newFile) 
-        {
-            return new TreeEntity { 
-                File = newFile, 
-                Name = getNewFileName(file.Name), 
-                Id = file.Id, Owner = file.Owner, 
-                Children = file.Children, 
-                Parent = file.Parent, 
-                ParentId = file.ParentId, 
-                Size = newFile.Length 
-            };
-        }
-
-        private string getNewFileName(string fileName) 
+        public string getNewFileName(string fileName) 
         {
             string[] seperatedName = fileName.Split('.');
             seperatedName[seperatedName.Length - 1] = this.extension;
