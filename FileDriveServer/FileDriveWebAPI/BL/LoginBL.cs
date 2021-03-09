@@ -45,6 +45,7 @@ namespace FileDriveWebAPI.BL
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.MaxValue
             };
 
             await httpContext.SignInAsync(
