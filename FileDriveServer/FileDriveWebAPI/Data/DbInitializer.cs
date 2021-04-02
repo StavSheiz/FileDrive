@@ -98,7 +98,7 @@ namespace FileDriveWebAPI.Data
 
         private static User getUser(FileDriveContext context, int id) 
         {
-            return context.Users.FirstOrDefault(u => u.Id == 2);
+            return context.Users.FirstOrDefault(u => u.Id == 3);
         }
 
         private static TreeEntity getEntity(FileDriveContext context, int id)

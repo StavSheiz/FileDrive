@@ -15,7 +15,8 @@ namespace FileDriveWebAPI.BL
 
         public TreeEntity[] GetTree()
         {
-            return this.unitOfWork.TreeRepository.Get(includeProperties: "Children,Owner").Where(x => x.ParentId == null).ToArray();
+            TreeEntity[] tree = this.unitOfWork.TreeRepository.Get(includeProperties: "Children,Owner").Where(x => x.ParentId == null).ToArray();
+            return tree;
         }
 
         public TreeEntity GetTreeEntity(int entityId)
@@ -28,6 +29,15 @@ namespace FileDriveWebAPI.BL
             }
 
             return entity;
+        }
+
+        public bool RenameTreeEntity(int entityId, string newName)
+        {
+            TreeEntity toUpdate = this.unitOfWork.TreeRepository.Get(entity => entity.Id == entityId).First();
+            toUpdate.Name = newName;
+            this.unitOfWork.TreeRepository.Update(toUpdate);
+            this.unitOfWork.Save();
+            return true;
         }
 
         public TreeEntity AddFile(IFormFile file, int parentId, int userId)
@@ -77,6 +87,18 @@ namespace FileDriveWebAPI.BL
             this.unitOfWork.TreeRepository.Insert(newTreeEntity);
             this.unitOfWork.Save();
             return newTreeEntity;
+        }
+
+        public bool Delete(int entityId)
+        {
+            int[] entitiesIds = this.unitOfWork.TreeRepository.GetChildrenIds(entityId);
+            foreach (int id in entitiesIds)
+            {
+                this.unitOfWork.TreeRepository.Delete(id);
+            }
+            this.unitOfWork.Save();
+
+            return true;
         }
 
         public TreeEntity DuplicateFile(int entityId, int userId) 

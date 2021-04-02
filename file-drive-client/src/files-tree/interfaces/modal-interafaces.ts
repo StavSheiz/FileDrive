@@ -7,5 +7,6 @@ export interface IOpenModalParams {
 
 export interface IBaseModalProps {
     entity: ITreeEntity | null,
-    closeModal: () => void
+    closeModal: () => void,
+    setTree? : (newTree: ITreeEntity[] | null | ((prevTree: ITreeEntity[] | null) => ITreeEntity[])) => void
 }

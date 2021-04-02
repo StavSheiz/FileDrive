@@ -1,7 +1,7 @@
 import { ENUMExceptionCodes } from '../../enums/ENUMExceptionCodes';
 import { IResponse } from './interfaces/response-interfaces';
 import { Logger } from '../log/logger';
-import { IGetRequestParams, IPostRequestParams } from './interfaces/request-params-interfaces';
+import { IDeleteRequestParams, IGetRequestParams, IPostRequestParams } from './interfaces/request-params-interfaces';
 import axios from 'axios'
 
 const defaultHeaders = {
@@ -53,6 +53,28 @@ export class AxiosRequest {
             }
         } catch (ex) {
             Logger.error(`post request failed - url: ${url}`, ex);
+        }
+
+        return responseData;
+    }
+
+    public static async delete<TUrlParams, TData, TResponseData>({ url, id, headers }: IDeleteRequestParams) {
+        let responseData: IResponse<TResponseData> = {
+            data: null,
+            exception: { message: "Error in delete request", exceptionCode: ENUMExceptionCodes.RequestError }
+        }
+
+        try {
+            const response = await axios.delete(`${url}/${id}`, {
+                headers: headers ? {...defaultHeaders, ...headers} : defaultHeaders  });
+
+            if (response.status === 200) {
+                responseData = response.data;
+            } else {
+                Logger.error(`delete request failed - url: ${url}`, new Error(`Bad response - status: ${response.status} ${response.statusText}`))
+            }
+        } catch (ex) {
+            Logger.error(`delete request failed - url: ${url}`, ex);
         }
 
         return responseData;

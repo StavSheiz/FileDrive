@@ -62,6 +62,29 @@ namespace FileDriveWebAPI.Controllers
             
         }
 
+        [HttpDelete("deleteTreeEntity/{entityId}")]
+        [Authorize(Policy = "User")]
+        public async Task<ActionResult<Response<bool>>> DeleteTreeEntity(int entityId)
+        {
+            try
+            {
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(entityId), new EditRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    return new Response<bool>(this.bl.Delete(entityId));
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool>(false);
+            }
+
+        }
+
         [HttpPost("addFolder")]
         [Authorize(Policy = "User")]
         public async Task<ActionResult<Response<TreeEntity>>> AddFolder([FromBody]AddFolderDTO folderDetails)
@@ -83,6 +106,30 @@ namespace FileDriveWebAPI.Controllers
             catch (Exception ex)
             {
                 return new Response<TreeEntity>(ex);
+            }
+
+        }
+
+        [HttpPost("renameEntity")]
+        [Authorize(Policy = "User")]
+        public async Task<ActionResult<Response<bool>>> RenameEntity([FromBody] RenameEntityDTO renamedEntityDetails)
+        {
+            try
+            {
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(renamedEntityDetails.entityId), new EditRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    bool succeeded = this.bl.RenameTreeEntity(renamedEntityDetails.entityId, renamedEntityDetails.newName);
+                    return new Response<bool>(succeeded);
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool>(ex);
             }
 
         }

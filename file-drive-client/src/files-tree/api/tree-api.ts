@@ -37,6 +37,14 @@ export const addFolder = async (folderName: string, parentId: number) => {
     return response
 }
 
+export const deleteTreeEntity = async (entityId: number) => {
+    const response = await AxiosRequest.delete<any, any, boolean>({
+        url: appConfig.baseUrl + "/api/files/deleteTreeEntity",
+        id: entityId
+    })
+
+    return response
+}
 export const duplicateFile = async (fileId: number) => {
     const response = await AxiosRequest.get<IDuplicateFileRequestParams, ITreeEntity>({
         url: appConfig.baseUrl + "/api/files/duplicateFile",
@@ -48,6 +56,18 @@ export const duplicateFile = async (fileId: number) => {
     return response;
 }
 
+type RenameEntityData = { newName: string, entityId: number }
+export const renameEntity = async (newName: string, entityId: number) => {
+    const response = await AxiosRequest.post<{}, RenameEntityData, ITreeEntity>({
+        url: appConfig.baseUrl + "/api/files/renameEntity",
+        data: {
+            newName,
+            entityId
+        }
+    })
+
+    return response
+}
 export const convertFile = async (fileId: number, conversionType: ENUMConverterType) => {
     const response = await AxiosRequest.get<IConvertFileRequestParams, ITreeEntity>({
         url: appConfig.baseUrl + "/api/files/convertFile",

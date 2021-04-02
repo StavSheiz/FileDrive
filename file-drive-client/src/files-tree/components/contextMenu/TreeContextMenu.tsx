@@ -43,9 +43,17 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
         return (
             <ContextMenu id="context-menu">
                 {trigger && user && trigger.entity?.owner?.id === user.id &&
+                <>
                     < MenuItem data={{ entity: trigger.entity, modalType: ENUMModalType.EditPermissions }} onClick={this.handleClick}>
                         Edit Permissions
                     </MenuItem>
+                    < MenuItem data={{ entity: trigger.entity, modalType: ENUMModalType.Delete }} onClick={this.handleClick}>
+                    Delete
+                </MenuItem>
+                < MenuItem data={{ entity: trigger.entity, modalType: ENUMModalType.Rename }} onClick={this.handleClick}>
+                    Rename
+                </MenuItem>
+                </>
                 }
                 {trigger && trigger.entity &&
                     < MenuItem data={{ entity: trigger.entity, modalType: ENUMModalType.Details }} onClick={this.handleClick}>

@@ -11,3 +11,8 @@ export interface IPostRequestParams<TUrlParams, TData> extends IRequestParams<TU
     headers?: any
 }
 
+export interface IDeleteRequestParams {
+    url: string,
+    id: number,
+    headers?: any
+}

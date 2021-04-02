@@ -10,6 +10,8 @@ import TreeContextMenu from './contextMenu/TreeContextMenu';
 import CurrentTreeEntity from './CurrentTreeEntity';
 import { AddTreeEntityToTree, UpdateTreeEntity } from '../helpers/tree-helpers';
 import useErrorContext from '../../errors/ErrorContext';
+import DeleteEntityModal from './modals/DeleteEntityModal';
+import RenameEntityModal from './modals/RenameEntityModal';
 import DetailsModal from './modals/DetailsModal';
 import { ENUMConverterType } from '../../enums/ENUMConverterType';
 import { ConversionLogic } from '../logic/conversion-logic';
@@ -19,6 +21,8 @@ interface IFilesTreeProps {
 
 const ModalTypes = {
     [ENUMModalType.EditPermissions]: EditPermissionsModal,
+    [ENUMModalType.Delete]: DeleteEntityModal,
+    [ENUMModalType.Rename]: RenameEntityModal,
     [ENUMModalType.Details]: DetailsModal
 }
 
@@ -63,7 +67,7 @@ const FilesTree = (props: IFilesTreeProps) => {
             if (exception) {
                 setException(exception)
             } else if (data) {
-                const newTreeEntity = data
+                const newTreeEntity = { ...data, children: []}
                 setTree(prevTree => {
                     let newTree = [...(prevTree as ITreeEntity[])]
                     newTree.forEach(child => AddTreeEntityToTree(child, newTreeEntity))
@@ -153,7 +157,7 @@ const FilesTree = (props: IFilesTreeProps) => {
             <Modal
                 open={open}
                 onClose={handleClose}>
-                {React.createElement(ModalTypes[modalBody], { entity: modalEntity, closeModal: handleClose })}
+                {React.createElement(ModalTypes[modalBody], { entity: modalEntity, closeModal: handleClose, setTree: setTree })}
             </Modal>
             <TreeContextMenu />
         </div >
