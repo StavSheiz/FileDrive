@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ErrorContextProvider } from './errors/ErrorContext';
+import { UserService } from './login/logic/user-service';
+
 
 ReactDOM.render(
   <React.StrictMode>

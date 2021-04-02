@@ -7,6 +7,8 @@ import { IOpenModalParams } from "../../interfaces/modal-interafaces";
 import './cotext.css'
 import { ITreeEntity } from "../../interfaces/ITreeEntity";
 import { duplicateFile } from "../../api/tree-api";
+import { ConversionLogic } from "../../logic/conversion-logic";
+import { ENUMConverterType } from "../../../enums/ENUMConverterType";
 
 interface ITreeContextMenuState { }
 
@@ -22,6 +24,16 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
 
     handleDuplicate = (event: any, data: { entity: ITreeEntity }) => {
         this.props.trigger.handleDuplicate(data.entity);
+    }
+
+    convertFile = (event: any, data: { entity: ITreeEntity, conversionType: ENUMConverterType }) => {
+        this.props.trigger.handleConvert(data.entity, data.conversionType);
+    }
+
+    canConvert = (conversionType: ENUMConverterType, fileName: string) => {
+        const conversionTypes = ConversionLogic.getAvailableConversionTypes(fileName);
+
+        return conversionTypes.indexOf(conversionType) !== -1;
     }
 
     render() {
@@ -51,6 +63,16 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
                 {trigger && trigger.entity && trigger.entity.file &&
                     < MenuItem data={{ entity: trigger.entity }} onClick={this.handleDuplicate}>
                         Duplicate
+                    </MenuItem>
+                }
+                {trigger && trigger.entity && trigger.entity.file && this.canConvert(ENUMConverterType.JPGToPNG, trigger.entity.name) &&
+                    < MenuItem data={{ entity: trigger.entity, conversionType: ENUMConverterType.JPGToPNG }} onClick={this.convertFile}>
+                        Convert To PNG
+                    </MenuItem>
+                }
+                {trigger && trigger.entity && trigger.entity.file && this.canConvert(ENUMConverterType.PNGToJPG, trigger.entity.name) &&
+                    < MenuItem data={{ entity: trigger.entity, conversionType: ENUMConverterType.PNGToJPG }} onClick={this.convertFile}>
+                        Convert To JPG
                     </MenuItem>
                 }
             </ContextMenu>

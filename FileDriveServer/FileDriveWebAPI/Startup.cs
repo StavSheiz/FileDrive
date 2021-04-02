@@ -97,9 +97,9 @@ namespace FileDriveWebAPI
 
         private void addAuthorizationHandlers(IServiceCollection services) 
         {
+            services.AddTransient<IAuthorizationHandler, TreeEntityViewHandler>();
             services.AddTransient<IAuthorizationHandler, TreeEntityEditHandler>();
-            services.AddTransient<IAuthorizationHandler, PermissionsEditHandler>();
-
+            services.AddTransient<IAuthorizationHandler, TreeEntityOwnerHandler>();
         }
     }
 }

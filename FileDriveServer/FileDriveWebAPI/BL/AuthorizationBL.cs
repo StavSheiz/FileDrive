@@ -13,9 +13,19 @@ namespace FileDriveWebAPI.BL
     {
         public AuthorizationBL(FileDriveContext context) : base(context) { }
 
+        public bool HasViewPermissions(ClaimsPrincipal user, TreeEntity resource)
+        {
+            return this.isOwner(user, resource) || 
+                this.isAdmin(user) || 
+                this.hasEditPermissionsOnResource(user, resource) || 
+                this.hasViewPermissionsOnResource(user, resource);
+        }
+
         public bool HasEditPermissions(ClaimsPrincipal user, TreeEntity resource)
         {
-            return this.isOwner(user, resource) || this.isAdmin(user) || this.hasEditPermissionsOnResource(user, resource);
+            return this.isOwner(user, resource) || 
+                this.isAdmin(user) || 
+                this.hasEditPermissionsOnResource(user, resource);
         }
 
         public bool HasOwnerPermissions(ClaimsPrincipal user, TreeEntity resource) 
@@ -38,7 +48,16 @@ namespace FileDriveWebAPI.BL
         {
             int userId = Convert.ToInt32(user.FindFirst(ClaimTypes.SerialNumber).Value);
 
-            return this.unitOfWork.PermissionRepository.HasPermissions(resource.Id, userId, ENUMPermissionType.Edit);
+            return this.unitOfWork.PermissionRepository.HasPermissions(resource.Id, userId, ENUMPermissionType.Edit) || 
+                this.unitOfWork.TreeRepository.IsOwnerOfAncestor(resource.Id, userId);
+        }
+
+        private bool hasViewPermissionsOnResource(ClaimsPrincipal user, TreeEntity resource) 
+        {
+            int userId = Convert.ToInt32(user.FindFirst(ClaimTypes.SerialNumber).Value);
+
+            return this.unitOfWork.PermissionRepository.HasPermissions(resource.Id, userId, ENUMPermissionType.View) ||
+                this.unitOfWork.TreeRepository.IsOwnerOfAncestor(resource.Id, userId);
         }
     }
 }

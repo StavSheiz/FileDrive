@@ -5,6 +5,7 @@ import { TreeItem, TreeView } from '@material-ui/lab';
 import { Folder, Description } from '@material-ui/icons';
 import { TreeContextMenuTrigger } from './contextMenu/TreeContextMenuTrigger';
 import { IOpenModalParams } from '../interfaces/modal-interafaces';
+import { ENUMConverterType } from '../../enums/ENUMConverterType';
 
 
 
@@ -12,7 +13,8 @@ interface ISideTreeProps {
     tree: ITreeEntity[] | null,
     openModal: (params: IOpenModalParams) => void,
     onTreeItemClick: (entity: ITreeEntity) => void,
-    handleDuplicate: (entity: ITreeEntity) => void
+    handleDuplicate: (entity: ITreeEntity) => void,
+    handleConvert: (entity: ITreeEntity, conversionType: ENUMConverterType) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -26,7 +28,7 @@ const collect = (props: any) => {
 }
 
 const SideTree = (props: ISideTreeProps) => {
-    const { tree, openModal, onTreeItemClick, handleDuplicate } = props
+    const { tree, openModal, onTreeItemClick, handleDuplicate, handleConvert } = props
     const classes = useStyles()
 
     const onClick = (treeEntity: ITreeEntity) => () => {
@@ -35,7 +37,7 @@ const SideTree = (props: ISideTreeProps) => {
     const buildTree = (currentTreeEntity: ITreeEntity) => {
         if (currentTreeEntity)
             return (
-                <TreeContextMenuTrigger id="context-menu" collect={collect} entity={currentTreeEntity} handleDuplicate={handleDuplicate} openModal={openModal}>
+                <TreeContextMenuTrigger id="context-menu" collect={collect} entity={currentTreeEntity} handleDuplicate={handleDuplicate} handleConvert={handleConvert} openModal={openModal}>
                     <TreeItem
                         nodeId={currentTreeEntity.id.toString()}
                         label={currentTreeEntity.name}

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using FileDriveWebAPI.BL;
 using FileDriveWebAPI.Data;
+using FileDriveWebAPI.Enums;
 using FileDriveWebAPI.Models;
 using FileDriveWebAPI.Utils.Authorization.Requirements;
 using Microsoft.AspNetCore.Authorization;
@@ -19,12 +20,14 @@ namespace FileDriveWebAPI.Controllers
     [Route("api/[controller]")]
     public class FilesController : Controller
     {
-        private TreeBL bl;
+        private TreeBL treeBl;
+        private ConversionBL conversionBl;
         private IAuthorizationService authorizationService;
 
         public FilesController(FileDriveContext context, IAuthorizationService authorizationService)
         {
-            this.bl = new TreeBL(context);
+            this.treeBl = new TreeBL(context);
+            this.conversionBl = new ConversionBL(context);
             this.authorizationService = authorizationService;
         }
 
@@ -32,7 +35,7 @@ namespace FileDriveWebAPI.Controllers
         [Authorize(Policy = "User")]
         public ActionResult<Response<TreeEntity[]>> GetTree()
         {
-            return new Response<TreeEntity[]>(this.bl.GetTree());
+            return new Response<TreeEntity[]>(this.treeBl.GetTree());
         }
 
         [HttpPost("addFile")]
@@ -41,11 +44,11 @@ namespace FileDriveWebAPI.Controllers
         {
             try
             {
-                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(parentId), new EditRequirement());
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.treeBl.GetTreeEntity(parentId), new EditRequirement());
                 if (authorizationResult.Succeeded)
                 {
                     int userId = Convert.ToInt32(this.User.FindFirst(ClaimTypes.SerialNumber).Value);
-                    TreeEntity newTreeEntity = this.bl.AddFile(uploadedFile, parentId, userId);
+                    TreeEntity newTreeEntity = this.treeBl.AddFile(uploadedFile, parentId, userId);
                     return new Response<TreeEntity>(newTreeEntity);
                 }
                 else
@@ -88,11 +91,11 @@ namespace FileDriveWebAPI.Controllers
         {
             try
             {
-                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(folderDetails.parentId), new EditRequirement());
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.treeBl.GetTreeEntity(folderDetails.parentId), new EditRequirement());
                 if (authorizationResult.Succeeded)
                 {
                     int userId = Convert.ToInt32(this.User.FindFirst(ClaimTypes.SerialNumber).Value);
-                    TreeEntity newTreeEntity = this.bl.AddFolder(folderDetails.folderName, folderDetails.parentId, userId);
+                    TreeEntity newTreeEntity = this.treeBl.AddFolder(folderDetails.folderName, folderDetails.parentId, userId);
                     return new Response<TreeEntity>(newTreeEntity);
                 }
                 else
@@ -137,12 +140,37 @@ namespace FileDriveWebAPI.Controllers
         {
             try
             {
-                TreeEntity entity = this.bl.GetTreeEntity(entityId);
-                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(entity.ParentId ?? -1), new EditRequirement());
+                TreeEntity entity = this.treeBl.GetTreeEntity(entityId);
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.treeBl.GetTreeEntity(entity.ParentId ?? -1), new EditRequirement());
                 if (authorizationResult.Succeeded)
                 {
                     int userId = Convert.ToInt32(this.User.FindFirst(ClaimTypes.SerialNumber).Value);
-                    TreeEntity newTreeEntity = this.bl.DuplicateFile(entityId, userId);
+                    TreeEntity newTreeEntity = this.treeBl.DuplicateFile(entityId, userId);
+                    return new Response<TreeEntity>(newTreeEntity);
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<TreeEntity>(ex);
+            }
+
+        }
+
+        [HttpGet("convertFile")]
+        [Authorize(Policy = "User")]
+        public async Task<ActionResult<Response<TreeEntity>>> ConvertFile(int entityId, ENUMConverterType type)
+        {
+            try
+            {
+                TreeEntity entity = this.treeBl.GetTreeEntity(entityId);
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, entity, new ViewRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    TreeEntity newTreeEntity = this.conversionBl.ConvertFile(type, entity);
                     return new Response<TreeEntity>(newTreeEntity);
                 }
                 else
