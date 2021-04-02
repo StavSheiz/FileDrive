@@ -33,9 +33,9 @@ namespace FileDriveWebAPI.DAL
 						INNER JOIN treeList AS TL
 						ON parents.Id = TL.ParentId
 						)
-					SELECT treeList.Id, treeList.treeLevel FROM treeList, [filedriveadmin].[Permissions] perms
+					SELECT treeList.Id as EntityId, perms.Id as Id, perms.UserId as UserId, perms.PermissionType as PermissionType, treeList.treeLevel FROM treeList, [filedriveadmin].[Permissions] perms
 					WHERE treeList.Id=perms.EntityId and perms.UserId=@userId and PermissionType=@permissionType
-					", new SqlParameter[] { userParam, entityParam, permissionParam }).Any();
+					", new SqlParameter[] { userParam, entityParam, permissionParam }).AsEnumerable().Any();
 
 			return hasPermissions;
         }

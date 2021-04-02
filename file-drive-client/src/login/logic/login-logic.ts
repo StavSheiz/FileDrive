@@ -80,6 +80,5 @@ export class LoginLogic {
             return message
         }
 
-        // TODO: Redirect to login
     }
 }

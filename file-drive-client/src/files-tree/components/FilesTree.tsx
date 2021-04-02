@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { addFile, addFolder, getTree } from '../api/tree-api';
+import { addFile, addFolder, duplicateFile, getTree } from '../api/tree-api';
 import { ITreeEntity } from '../interfaces/ITreeEntity';
 import { Grid, Typography, Modal } from '@material-ui/core';
 import SideTree from './SideTree';
@@ -12,6 +12,7 @@ import { AddTreeEntityToTree } from '../helpers/tree-helpers';
 import useErrorContext from '../../errors/ErrorContext';
 import DeleteEntityModal from './modals/DeleteEntityModal';
 import RenameEntityModal from './modals/RenameEntityModal';
+import DetailsModal from './modals/DetailsModal';
 
 interface IFilesTreeProps {
 }
@@ -19,7 +20,8 @@ interface IFilesTreeProps {
 const ModalTypes = {
     [ENUMModalType.EditPermissions]: EditPermissionsModal,
     [ENUMModalType.Delete]: DeleteEntityModal,
-    [ENUMModalType.Rename]: RenameEntityModal
+    [ENUMModalType.Rename]: RenameEntityModal,
+    [ENUMModalType.Details]: DetailsModal
 }
 
 const FilesTree = (props: IFilesTreeProps) => {
@@ -29,7 +31,7 @@ const FilesTree = (props: IFilesTreeProps) => {
     const [open, setOpen] = React.useState(false);
     const [modalBody, setModalBody] = useState<ENUMModalType>(ENUMModalType.EditPermissions);
     const [modalEntity, setModalEntity] = useState<ITreeEntity | null>(null);
-    const {setException} = useErrorContext()
+    const { setException } = useErrorContext()
 
     const onTreeEntitySelect = (entity: ITreeEntity) => {
         setSelectedTreeEntity(entity);
@@ -40,7 +42,7 @@ const FilesTree = (props: IFilesTreeProps) => {
             const formData = new FormData()
             formData.append('uploadedFile', file)
             formData.append('parentId', (selectedTreeEntity as ITreeEntity).id.toString())
-            const {data, exception} = await addFile(formData)
+            const { data, exception } = await addFile(formData)
             if (exception) {
                 setException(exception)
             } else if (data) {
@@ -58,7 +60,27 @@ const FilesTree = (props: IFilesTreeProps) => {
 
     const onAddFolder = async (folderName: string) => {
         try {
-            const {data, exception} = await addFolder(folderName, (selectedTreeEntity as ITreeEntity).id)
+            const { data, exception } = await addFolder(folderName, (selectedTreeEntity as ITreeEntity).id)
+
+            if (exception) {
+                setException(exception)
+            } else if (data) {
+                const newTreeEntity = { ...data, children: []}
+                setTree(prevTree => {
+                    let newTree = [...(prevTree as ITreeEntity[])]
+                    newTree.forEach(child => AddTreeEntityToTree(child, newTreeEntity))
+                    return newTree
+                })
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const handleDuplicate = async (entity: ITreeEntity) => {
+        try {
+
+            const { data, exception } = await duplicateFile(entity.id);
 
             if (exception) {
                 setException(exception)
@@ -70,6 +92,7 @@ const FilesTree = (props: IFilesTreeProps) => {
                     return newTree
                 })
             }
+
         } catch (error) {
             console.error(error)
         }
@@ -101,17 +124,17 @@ const FilesTree = (props: IFilesTreeProps) => {
                 </Grid>
                 <Grid container item xs={12}>
                     <Grid xs={3}>
-                        <SideTree tree={tree} openModal={handleOpen} onTreeItemClick={onTreeEntitySelect} />
+                        <SideTree tree={tree} openModal={handleOpen} handleDuplicate={handleDuplicate} onTreeItemClick={onTreeEntitySelect} />
                     </Grid>
                     <Grid xs={9}>
-                        <CurrentTreeEntity entity={selectedTreeEntity} onAddFile={onAddFile} onAddFolder={onAddFolder} />
+                        <CurrentTreeEntity openModal={handleOpen} entity={selectedTreeEntity} handleDuplicate={handleDuplicate} onAddFile={onAddFile} onAddFolder={onAddFolder} />
                     </Grid>
                 </Grid>
             </Grid>
             <Modal
                 open={open}
                 onClose={handleClose}>
-                {React.createElement(ModalTypes[modalBody], { entity: modalEntity, closeModal: handleClose })}
+                {React.createElement(ModalTypes[modalBody], { entity: modalEntity, closeModal: handleClose, setTree: setTree })}
             </Modal>
             <TreeContextMenu />
         </div >

@@ -11,7 +11,8 @@ import { IOpenModalParams } from '../interfaces/modal-interafaces';
 interface ISideTreeProps {
     tree: ITreeEntity[] | null,
     openModal: (params: IOpenModalParams) => void,
-    onTreeItemClick: (entity: ITreeEntity) => void
+    onTreeItemClick: (entity: ITreeEntity) => void,
+    handleDuplicate: (entity: ITreeEntity) => void
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -25,7 +26,7 @@ const collect = (props: any) => {
 }
 
 const SideTree = (props: ISideTreeProps) => {
-    const { tree, openModal, onTreeItemClick } = props
+    const { tree, openModal, onTreeItemClick, handleDuplicate } = props
     const classes = useStyles()
 
     const onClick = (treeEntity: ITreeEntity) => () => {
@@ -34,10 +35,10 @@ const SideTree = (props: ISideTreeProps) => {
     const buildTree = (currentTreeEntity: ITreeEntity) => {
         if (currentTreeEntity)
             return (
-                <TreeContextMenuTrigger id="context-menu" collect={collect} entity={currentTreeEntity} openModal={openModal}>
-                    <TreeItem 
-                        nodeId={currentTreeEntity.id.toString()} 
-                        label={currentTreeEntity.name} 
+                <TreeContextMenuTrigger id="context-menu" collect={collect} entity={currentTreeEntity} handleDuplicate={handleDuplicate} openModal={openModal}>
+                    <TreeItem
+                        nodeId={currentTreeEntity.id.toString()}
+                        label={currentTreeEntity.name}
                         icon={currentTreeEntity.file ? <Description /> : <Folder />}
                         onClick={onClick(currentTreeEntity)}>
                         {

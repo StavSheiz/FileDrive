@@ -106,6 +106,56 @@ namespace FileDriveWebAPI.Controllers
             }
 
         }
+
+        [HttpPost("renameEntity")]
+        [Authorize(Policy = "User")]
+        public async Task<ActionResult<Response<bool>>> RenameEntity([FromBody] RenameEntityDTO renamedEntityDetails)
+        {
+            try
+            {
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(renamedEntityDetails.entityId), new EditRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    bool succeeded = this.bl.RenameTreeEntity(renamedEntityDetails.entityId, renamedEntityDetails.newName);
+                    return new Response<bool>(succeeded);
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool>(ex);
+            }
+
+        }
+
+        [HttpGet("duplicateFile")]
+        [Authorize(Policy = "User")]
+        public async Task<ActionResult<Response<TreeEntity>>> DuplicateFile(int entityId)
+        {
+            try
+            {
+                TreeEntity entity = this.bl.GetTreeEntity(entityId);
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(entity.ParentId ?? -1), new EditRequirement());
+                if (authorizationResult.Succeeded)
+                {
+                    int userId = Convert.ToInt32(this.User.FindFirst(ClaimTypes.SerialNumber).Value);
+                    TreeEntity newTreeEntity = this.bl.DuplicateFile(entityId, userId);
+                    return new Response<TreeEntity>(newTreeEntity);
+                }
+                else
+                {
+                    return new ForbidResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<TreeEntity>(ex);
+            }
+
+        }
     }
 
 }
