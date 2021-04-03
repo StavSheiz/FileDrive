@@ -68,10 +68,10 @@ namespace FileDriveWebAPI.Controllers
         {
             try
             {
-                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(entityId), new EditRequirement());
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.treeBl.GetTreeEntity(entityId), new EditRequirement());
                 if (authorizationResult.Succeeded)
                 {
-                    return new Response<bool>(this.bl.Delete(entityId));
+                    return new Response<bool>(this.treeBl.Delete(entityId));
                 }
                 else
                 {
@@ -116,10 +116,10 @@ namespace FileDriveWebAPI.Controllers
         {
             try
             {
-                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(renamedEntityDetails.entityId), new EditRequirement());
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.treeBl.GetTreeEntity(renamedEntityDetails.entityId), new EditRequirement());
                 if (authorizationResult.Succeeded)
                 {
-                    bool succeeded = this.bl.RenameTreeEntity(renamedEntityDetails.entityId, renamedEntityDetails.newName);
+                    bool succeeded = this.treeBl.RenameTreeEntity(renamedEntityDetails.entityId, renamedEntityDetails.newName);
                     return new Response<bool>(succeeded);
                 }
                 else

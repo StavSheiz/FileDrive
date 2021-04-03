@@ -15,6 +15,7 @@ import RenameEntityModal from './modals/RenameEntityModal';
 import DetailsModal from './modals/DetailsModal';
 import { ENUMConverterType } from '../../enums/ENUMConverterType';
 import { ConversionLogic } from '../logic/conversion-logic';
+import { b64toBlob } from '../helpers/file-helpers';
 
 interface IFilesTreeProps {
 }
@@ -100,6 +101,18 @@ const FilesTree = (props: IFilesTreeProps) => {
         }
     }
 
+    const handleDownload = async (entity: ITreeEntity) => {
+        const url = window.URL.createObjectURL(b64toBlob(entity.file));
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = entity.name;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
     const handleConvert = async (entity: ITreeEntity, conversionType: ENUMConverterType) => {
         try {
 
@@ -147,10 +160,10 @@ const FilesTree = (props: IFilesTreeProps) => {
                 </Grid>
                 <Grid container item xs={12}>
                     <Grid xs={3}>
-                        <SideTree tree={tree} openModal={handleOpen} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onTreeItemClick={onTreeEntitySelect} />
+                        <SideTree tree={tree} openModal={handleOpen} download={handleDownload} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onTreeItemClick={onTreeEntitySelect} />
                     </Grid>
                     <Grid xs={9}>
-                        <CurrentTreeEntity openModal={handleOpen} entity={selectedTreeEntity} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onAddFile={onAddFile} onAddFolder={onAddFolder} />
+                        <CurrentTreeEntity openModal={handleOpen} download={handleDownload} entity={selectedTreeEntity} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onAddFile={onAddFile} onAddFolder={onAddFolder} />
                     </Grid>
                 </Grid>
             </Grid>

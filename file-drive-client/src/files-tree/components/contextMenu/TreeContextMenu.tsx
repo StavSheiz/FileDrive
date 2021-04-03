@@ -26,6 +26,10 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
         this.props.trigger.handleDuplicate(data.entity);
     }
 
+    handleDownload = (event: any, data: {entity: ITreeEntity}) => {
+        this.props.trigger.download(data.entity)
+    }
+
     convertFile = (event: any, data: { entity: ITreeEntity, conversionType: ENUMConverterType }) => {
         this.props.trigger.handleConvert(data.entity, data.conversionType);
     }
@@ -63,6 +67,11 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
                 {trigger && trigger.entity && trigger.entity.file &&
                     < MenuItem data={{ entity: trigger.entity }} onClick={this.handleDuplicate}>
                         Duplicate
+                    </MenuItem>
+                }
+                {trigger && trigger.entity && trigger.entity.file &&
+                    < MenuItem data={{ entity: trigger.entity }} onClick={this.handleDownload}>
+                        Download
                     </MenuItem>
                 }
                 {trigger && trigger.entity && trigger.entity.file && this.canConvert(ENUMConverterType.JPGToPNG, trigger.entity.name) &&

@@ -14,6 +14,7 @@ interface ISideTreeProps {
     openModal: (params: IOpenModalParams) => void,
     onTreeItemClick: (entity: ITreeEntity) => void,
     handleDuplicate: (entity: ITreeEntity) => void,
+    download: (entity: ITreeEntity) => void,
     handleConvert: (entity: ITreeEntity, conversionType: ENUMConverterType) => void
 }
 
@@ -28,7 +29,7 @@ const collect = (props: any) => {
 }
 
 const SideTree = (props: ISideTreeProps) => {
-    const { tree, openModal, onTreeItemClick, handleDuplicate, handleConvert } = props
+    const { tree, openModal, onTreeItemClick, handleDuplicate, handleConvert, download } = props
     const classes = useStyles()
 
     const onClick = (treeEntity: ITreeEntity) => () => {
@@ -37,7 +38,7 @@ const SideTree = (props: ISideTreeProps) => {
     const buildTree = (currentTreeEntity: ITreeEntity) => {
         if (currentTreeEntity)
             return (
-                <TreeContextMenuTrigger id="context-menu" collect={collect} entity={currentTreeEntity} handleDuplicate={handleDuplicate} handleConvert={handleConvert} openModal={openModal}>
+                <TreeContextMenuTrigger id="context-menu" collect={collect} entity={currentTreeEntity} download={download} handleDuplicate={handleDuplicate} handleConvert={handleConvert} openModal={openModal}>
                     <TreeItem
                         nodeId={currentTreeEntity.id.toString()}
                         label={currentTreeEntity.name}

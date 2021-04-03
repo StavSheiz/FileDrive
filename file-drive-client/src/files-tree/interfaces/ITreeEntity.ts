@@ -5,6 +5,6 @@ export interface ITreeEntity {
     owner: User
     children: ITreeEntity[],
     parentId: number,
-    file: File,
+    file: string,
     size: number
 }
