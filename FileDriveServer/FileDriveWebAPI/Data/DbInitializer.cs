@@ -29,14 +29,15 @@ namespace FileDriveWebAPI.Data
 
             var entities = new TreeEntity[]
             {
-                new TreeEntity{ Name="Photos", ParentId=null, Owner=context.Users.First(x => x.Id == 3)},
-                new TreeEntity{ Name="Documents", ParentId=null, Owner=context.Users.First(x => x.Id == 3) },
                 new TreeEntity{ Name="Pdf Docs", ParentId=2, Owner=context.Users.First(x => x.Id == 3) },
                 new TreeEntity{ Name="Word Docs", ParentId=2, Owner=context.Users.First(x => x.Id == 3) },
                 new TreeEntity{ Name="Wedding", ParentId=1, Owner=context.Users.First(x => x.Id == 3) },
                 new TreeEntity{ Name="Birthday", ParentId=1, Owner=context.Users.First(x => x.Id == 3) },
                 new TreeEntity{ Name="Bar Mitzvah", ParentId=1, Owner=context.Users.First(x => x.Id == 3) },
             };
+
+            context.TreeEntities.Add(new TreeEntity { Name = "Photos", ParentId = null, Owner = context.Users.First(x => x.Id == 3) });
+            context.TreeEntities.Add(new TreeEntity { Name = "Documents", ParentId = null, Owner = context.Users.First(x => x.Id == 3) });
 
             foreach (TreeEntity entity in entities) 
             {
