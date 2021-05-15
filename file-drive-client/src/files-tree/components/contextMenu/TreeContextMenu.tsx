@@ -1,14 +1,13 @@
-import { ContextMenu, MenuItem, connectMenu, ConnectMenuProps } from "react-contextmenu";
+import { Theme } from "@material-ui/core";
 import React from 'react';
-import { Theme, withStyles } from "@material-ui/core";
-import { UserService } from "../../../login/logic/user-service";
-import { ENUMModalType } from '../../../enums/ENUMModalType';
-import { IOpenModalParams } from "../../interfaces/modal-interafaces";
-import './cotext.css'
-import { ITreeEntity } from "../../interfaces/ITreeEntity";
-import { duplicateFile } from "../../api/tree-api";
-import { ConversionLogic } from "../../logic/conversion-logic";
+import { connectMenu, ConnectMenuProps, ContextMenu, MenuItem } from "react-contextmenu";
 import { ENUMConverterType } from "../../../enums/ENUMConverterType";
+import { ENUMModalType } from '../../../enums/ENUMModalType';
+import { UserService } from "../../../login/logic/user-service";
+import { ITreeEntity } from "../../interfaces/ITreeEntity";
+import { IOpenModalParams } from "../../interfaces/modal-interafaces";
+import { ConversionLogic } from "../../logic/conversion-logic";
+import './cotext.css';
 
 interface ITreeContextMenuState { }
 
@@ -82,6 +81,16 @@ class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuSt
                 {trigger && trigger.entity && trigger.entity.file && this.canConvert(ENUMConverterType.PNGToJPG, trigger.entity.name) &&
                     < MenuItem data={{ entity: trigger.entity, conversionType: ENUMConverterType.PNGToJPG }} onClick={this.convertFile}>
                         Convert To JPG
+                    </MenuItem>
+                }
+                {trigger && trigger.entity && trigger.entity.file && this.canConvert(ENUMConverterType.WORDToPDF, trigger.entity.name) &&
+                    < MenuItem data={{ entity: trigger.entity, conversionType: ENUMConverterType.WORDToPDF }} onClick={this.convertFile}>
+                        Convert To PDF
+                    </MenuItem>
+                }
+                {trigger && trigger.entity && trigger.entity.file && this.canConvert(ENUMConverterType.PDFToWORD, trigger.entity.name) &&
+                    < MenuItem data={{ entity: trigger.entity, conversionType: ENUMConverterType.PDFToWORD }} onClick={this.convertFile}>
+                        Convert To Word
                     </MenuItem>
                 }
             </ContextMenu>

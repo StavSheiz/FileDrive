@@ -1,12 +1,13 @@
-import { ConversionErrorMessage } from './conversion-error-messages';
-import { ENUMExceptionCodes } from './../../enums/ENUMExceptionCodes';
 import { convertFile } from './../api/tree-api';
 import { ENUMConverterType } from './../../enums/ENUMConverterType';
 
 export class ConversionLogic {
     private static extensionToConversionMap: { [key: string]: ENUMConverterType[] } = {
         'png': [ENUMConverterType.PNGToJPG],
-        'jpg': [ENUMConverterType.JPGToPNG]
+        'jpg': [ENUMConverterType.JPGToPNG],
+        'doc': [ENUMConverterType.WORDToPDF],
+        'docx': [ENUMConverterType.WORDToPDF],
+        'pdf': [ENUMConverterType.PDFToWORD],
     }
 
     public static getAvailableConversionTypes(fileName: string): ENUMConverterType[] {

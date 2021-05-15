@@ -3,11 +3,10 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles, Theme } from '@material-ui/core/styles';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
-import { Typography, Link, InputAdornment, IconButton, OutlinedInput, InputLabel, FormControl, Button, fade } from '@material-ui/core';
+import { Typography, InputAdornment, IconButton, OutlinedInput, InputLabel, FormControl, Button, fade } from '@material-ui/core';
 import { Visibility, VisibilityOff, Clear } from '@material-ui/icons/';
-import logo from '../../logo.svg'
 import { LoginLogic } from '../logic/login-logic';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter, Link } from 'react-router-dom';
 
 
 type ILoginProps = RouteComponentProps & {
@@ -102,7 +101,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                 <div className={classes.root}>
                     <Grid container direction="column" spacing={3} className={classes.container}>
                         <Grid item>
-                            <img alt={'loading logo...'} src={logo} className={classes.logo} />
+                            <img alt={'loading logo...'} src={"logo_transparent.png"} className={classes.logo} />
                         </Grid>
                         <Grid item>
                             <Typography variant="h6">Sign in to FileDrive</Typography>
@@ -186,7 +185,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                         <Grid item>
                             <Paper className={classes.newAccountPaper}>
                                 <Typography variant="body1">
-                                    New to FileDrive? <Link onClick={this.handleCreateAccount} > Create an account. </Link> {/* TODO: Redirect to create account */}
+                                    New to FileDrive? <Link to={"signup"} onClick={this.handleCreateAccount} color={"textPrimary"} > Create an account. </Link> {/* TODO: Redirect to create account */}
                                 </Typography>
                             </Paper>
                         </Grid>

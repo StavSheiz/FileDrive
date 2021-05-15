@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { withStyles, Theme } from '@material-ui/core/styles';
-import { ITreeEntity } from '../interfaces/ITreeEntity';
 import { Grid, Typography } from '@material-ui/core';
-import { Description, Folder } from '@material-ui/icons';
+import { Theme, withStyles } from '@material-ui/core/styles';
+import { DescriptionOutlined, FolderTwoTone } from '@material-ui/icons';
+import React from 'react';
+import { ENUMConverterType } from '../../enums/ENUMConverterType';
+import { ITreeEntity } from '../interfaces/ITreeEntity';
+import { IOpenModalParams } from '../interfaces/modal-interafaces';
 import AddTreeEntity from './AddTreeEntity';
 import { TreeContextMenuTrigger } from './contextMenu/TreeContextMenuTrigger';
-import { IOpenModalParams } from '../interfaces/modal-interafaces';
-import { ENUMConverterType } from '../../enums/ENUMConverterType';
 
 interface ICurrentTreeEntityProps {
     entity?: ITreeEntity,
@@ -32,17 +32,15 @@ const CurrentTreeEntity = (props: ICurrentTreeEntityProps) => {
 
 
     return (
-        <Grid container justify={"space-around"}>
+        <Grid container justify={"flex-start"} alignItems={"center"} spacing={5}>
             {entity && entity.children ? entity.children.map(child => {
                 return (
-                    <TreeContextMenuTrigger id="context-menu" collect={collect} entity={child} handleDuplicate={handleDuplicate} handleConvert={handleConvert} download={download} openModal={openModal}>
-                        <Grid item xs={3} key={child.id}>
-                            {
-                                child.file ? <Description /> : <Folder />
-                            }
+                    <Grid item xs={3} key={child.id}>
+                        <TreeContextMenuTrigger id="context-menu" collect={collect} entity={child} handleDuplicate={handleDuplicate} handleConvert={handleConvert} download={download} openModal={openModal}>
+                            {child.file ? <DescriptionOutlined /> : <FolderTwoTone />}
                             <Typography>{child.name}</Typography>
-                        </Grid>
                     </TreeContextMenuTrigger>
+                        </Grid>
                 )
             }) : undefined}
             {

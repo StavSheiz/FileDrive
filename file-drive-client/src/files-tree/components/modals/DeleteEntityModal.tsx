@@ -7,7 +7,7 @@ import ValidationPopUp from './ValidationPopUp'
 const DeleteEntityModal = (props: IBaseModalProps) => {
     const { closeModal, entity, setTree } = props;
     const deleteEntityInTree = (treeLevel: ITreeEntity[], entityId: number) => {
-        const filteredLevel = treeLevel.filter(entity => entity.id != entityId)
+        const filteredLevel = treeLevel.filter(entity => entity.id !== entityId)
 
         if (filteredLevel.length !== treeLevel.length){            
             return filteredLevel

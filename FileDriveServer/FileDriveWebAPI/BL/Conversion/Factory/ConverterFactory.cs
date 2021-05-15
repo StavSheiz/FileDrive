@@ -7,8 +7,19 @@ using System.Threading.Tasks;
 
 namespace FileDriveWebAPI.BL.Conversion.Factory
 {
-    public abstract class ConverterFactory
+    public static class ConverterFactory
     {
-        public abstract FileConverter GetConverter();
+        public static FileConverter GetConverter(ENUMConverterType converterType)
+        {
+            switch(converterType)
+            {
+                case (ENUMConverterType.JPGToPNG):
+                    return new JPGToPNGConverter();
+                case (ENUMConverterType.PNGToJPG):
+                    return new PNGToJPGConverter();
+                default:
+                    return null;
+            }
+        }
     }
 }

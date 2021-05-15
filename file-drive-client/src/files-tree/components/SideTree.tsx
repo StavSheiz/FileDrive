@@ -2,10 +2,11 @@ import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { ITreeEntity } from '../interfaces/ITreeEntity';
 import { TreeItem, TreeView } from '@material-ui/lab';
-import { Folder, Description } from '@material-ui/icons';
+import { DescriptionOutlined,  FolderTwoTone } from '@material-ui/icons';
 import { TreeContextMenuTrigger } from './contextMenu/TreeContextMenuTrigger';
 import { IOpenModalParams } from '../interfaces/modal-interafaces';
 import { ENUMConverterType } from '../../enums/ENUMConverterType';
+import { Drawer } from '@material-ui/core';
 
 
 
@@ -19,8 +20,21 @@ interface ISideTreeProps {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-    root: {
+    drawer: {
+        backgroundColor: theme.palette.primary.main,
+        padding: 10,
+        width: 300,
+    },
+    tree: {
         textAlign: 'left'
+    },
+    logo: {
+        margin: "0 auto",
+        height: 250,
+        width: 250
+    },
+    label: {
+        fontSize: theme.typography.h6.fontSize
     }
 }));
 
@@ -42,7 +56,10 @@ const SideTree = (props: ISideTreeProps) => {
                     <TreeItem
                         nodeId={currentTreeEntity.id.toString()}
                         label={currentTreeEntity.name}
-                        icon={currentTreeEntity.file ? <Description /> : <Folder />}
+                        classes={{
+                            label: classes.label
+                        }}
+                        icon={currentTreeEntity.file ? <DescriptionOutlined /> : <FolderTwoTone />}
                         onClick={onClick(currentTreeEntity)}>
                         {
                             currentTreeEntity.children && currentTreeEntity.children.map(child => buildTree(child))
@@ -53,11 +70,14 @@ const SideTree = (props: ISideTreeProps) => {
     }
 
     return (
-        <TreeView classes={{ root: classes.root }}>
+        <Drawer variant="permanent" classes={{paper: classes.drawer}}>
+        <img alt={"logo"} className={classes.logo} src={"logo_transparent.png"}/>
+        <TreeView classes={{ root: classes.tree }}>
             {
                 tree?.map(child => buildTree(child))
             }
         </TreeView>
+        </Drawer>
     )
 }
 

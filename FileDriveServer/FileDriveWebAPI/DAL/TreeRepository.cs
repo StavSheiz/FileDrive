@@ -43,13 +43,13 @@ namespace FileDriveWebAPI.DAL
 			bool hasPermissions = this.context.TreeEntities.FromSqlRaw(@"
 					WITH treeList AS
 						(SELECT tree.Id, tree.ParentId, tree.OwnerId, tree.Name, tree.[File], tree.Size, 1 AS treeLevel
-						FROM [filedriveadmin].[Tree_Entities] tree
+						FROM [Tree_Entities] tree
 						WHERE tree.Id=@entityId
 
 						UNION ALL
 
 						SELECT parents.Id, parents.ParentId, parents.OwnerId, parents.Name, parents.[File], parents.Size, TL.treeLevel + 1 AS treeLevel
-						FROM [filedriveadmin].[Tree_Entities] parents
+						FROM [Tree_Entities] parents
 						INNER JOIN treeList AS TL
 						ON parents.Id = TL.ParentId
 						)

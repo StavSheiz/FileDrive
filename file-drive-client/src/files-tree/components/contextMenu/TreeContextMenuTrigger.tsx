@@ -1,6 +1,5 @@
-import TreeContextMenu from "./TreeContextMenu";
-import { ContextMenuTrigger } from "react-contextmenu";
 import React from 'react';
+import { ContextMenuTrigger } from "react-contextmenu";
 
 
 export const TreeContextMenuTrigger = (props: any) => {
