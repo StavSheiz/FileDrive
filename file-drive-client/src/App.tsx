@@ -1,19 +1,16 @@
-import React from 'react';
-import './App.css';
-import Login from './login/components/Login'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom'
-import FilesTree from './files-tree/components/FilesTree';
-import { UserService } from './login/logic/user-service';
-import SignUp from './login/components/SignUp';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Redirect, Route, Switch
+} from 'react-router-dom';
+import './App.css';
 import useErrorContext from './errors/ErrorContext';
-
+import FilesTree from './files-tree/components/FilesTree';
+import Login from './login/components/Login';
+import SignUp from './login/components/SignUp';
+import { UserService } from './login/logic/user-service';
 function App() {
   const { error, setError } = useErrorContext()
 
@@ -27,11 +24,11 @@ function App() {
           <Route path="/tree">
             <FilesTree />
           </Route>
-          <Route path="/">
-            <Redirect to={'/tree'} />
-          </Route>
           <Route path="/signup">
             <SignUp />
+          </Route>
+          <Route path="/">
+            <Redirect to={'/tree'} />
           </Route>
         </Switch>
         {

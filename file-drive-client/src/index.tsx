@@ -4,14 +4,18 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ErrorContextProvider } from './errors/ErrorContext';
-import { UserService } from './login/logic/user-service';
-
+import { ThemeProvider } from '@material-ui/core';
+import { theme } from './config/theme';
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 ReactDOM.render(
   <React.StrictMode>
+    <ThemeProvider theme={theme}>
     <ErrorContextProvider>
+    <CssBaseline />
       <App />
     </ErrorContextProvider>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

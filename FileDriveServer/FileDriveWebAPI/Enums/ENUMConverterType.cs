@@ -8,6 +8,6 @@ namespace FileDriveWebAPI.Enums
     public enum ENUMConverterType
     {
         PNGToJPG,
-        JPGToPNG
+        JPGToPNG,
     }
 }

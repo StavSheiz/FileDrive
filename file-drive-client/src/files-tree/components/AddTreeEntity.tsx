@@ -1,4 +1,4 @@
-import { Card, IconButton, TextField } from '@material-ui/core'
+import { IconButton, TextField, Typography } from '@material-ui/core'
 import { AttachFile, CreateNewFolder } from '@material-ui/icons'
 import React, { useState } from 'react'
 interface IAddTreeEntityProps {
@@ -21,12 +21,15 @@ const AddTreeEntity = (props: IAddTreeEntityProps) => {
         onAddFolder && onAddFolder(e.target.value)
         setIsAddFolderMode(false)
     }
-    return (<Card elevation={1}>
+    return (<div>
         {
             isAddFolderMode ?
                 <TextField onBlur={onTextFieldBlur} />
                 :
                 <>
+                    <Typography variant={"subtitle2"}>
+                        {"Create a folder/Upload a file:"}
+                    </Typography>
                     <IconButton onClick={() => setIsAddFolderMode(true)}>
                         <CreateNewFolder />
                     </IconButton>
@@ -38,7 +41,7 @@ const AddTreeEntity = (props: IAddTreeEntityProps) => {
                     </label>
                 </>
         }
-    </Card>)
+    </div>)
 }
 
 export default AddTreeEntity

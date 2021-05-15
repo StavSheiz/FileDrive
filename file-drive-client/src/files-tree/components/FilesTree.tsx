@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { addFile, addFolder, duplicateFile, getTree } from '../api/tree-api';
 import { ITreeEntity } from '../interfaces/ITreeEntity';
-import { Grid, Typography, Modal } from '@material-ui/core';
+import { Grid, Typography, Modal, makeStyles, Theme } from '@material-ui/core';
 import SideTree from './SideTree';
 import { ENUMModalType } from '../../enums/ENUMModalType';
 import EditPermissionsModal from './modals/EditPermissionsModal';
@@ -15,6 +15,7 @@ import RenameEntityModal from './modals/RenameEntityModal';
 import DetailsModal from './modals/DetailsModal';
 import { ENUMConverterType } from '../../enums/ENUMConverterType';
 import { ConversionLogic } from '../logic/conversion-logic';
+import { b64toBlob } from '../helpers/file-helpers';
 
 interface IFilesTreeProps {
 }
@@ -25,6 +26,12 @@ const ModalTypes = {
     [ENUMModalType.Rename]: RenameEntityModal,
     [ENUMModalType.Details]: DetailsModal
 }
+
+const useStyles = makeStyles((theme: Theme) => ({
+    content: {
+        marginLeft: 300,
+    },
+}));
 
 const FilesTree = (props: IFilesTreeProps) => {
 
@@ -100,6 +107,18 @@ const FilesTree = (props: IFilesTreeProps) => {
         }
     }
 
+    const handleDownload = async (entity: ITreeEntity) => {
+        const url = window.URL.createObjectURL(b64toBlob(entity.file));
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = entity.name;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
     const handleConvert = async (entity: ITreeEntity, conversionType: ENUMConverterType) => {
         try {
 
@@ -136,21 +155,19 @@ const FilesTree = (props: IFilesTreeProps) => {
             setTree(data)
         })
     }, [])
-
+    const classes = useStyles()
     return (
         <div>
-            <Grid container>
-                <Grid item xs={12}>
+            <SideTree tree={tree} openModal={handleOpen} download={handleDownload} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onTreeItemClick={onTreeEntitySelect} />
+            <Grid container className={classes.content}>
+                <Grid item xs={4}>
                     <Typography variant={'h1'}>
-                        {'עץ תיקיות'}
+                        {'Files Tree'}
                     </Typography>
                 </Grid>
                 <Grid container item xs={12}>
-                    <Grid xs={3}>
-                        <SideTree tree={tree} openModal={handleOpen} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onTreeItemClick={onTreeEntitySelect} />
-                    </Grid>
-                    <Grid xs={9}>
-                        <CurrentTreeEntity openModal={handleOpen} entity={selectedTreeEntity} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onAddFile={onAddFile} onAddFolder={onAddFolder} />
+                    <Grid xs={12}>
+                        <CurrentTreeEntity openModal={handleOpen} download={handleDownload} entity={selectedTreeEntity} handleDuplicate={handleDuplicate} handleConvert={handleConvert} onAddFile={onAddFile} onAddFolder={onAddFolder} />
                     </Grid>
                 </Grid>
             </Grid>

@@ -23,27 +23,11 @@ namespace FileDriveWebAPI.BL
                 throw new InvalidParametersException();
             }
 
-            ConverterFactory factory = null;
-
-            switch (type) 
+            FileConverter converter = ConverterFactory.GetConverter(type);
+            if (converter == null)
             {
-                case ENUMConverterType.PNGToJPG:
-                    {
-                        factory = new PNGToJPGFactory();
-                        break;
-                    }
-                case ENUMConverterType.JPGToPNG: 
-                    {
-                        factory = new JPGToPNGFactory();
-                        break;
-                    }
-                default: 
-                    {
-                        throw new InvalidParametersException();
-                    }
+                throw new InvalidParametersException();
             }
-
-            FileConverter converter = factory.GetConverter();
 
             file.File = converter.Convert(file);
             file.Name = converter.getNewFileName(file.Name);

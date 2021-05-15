@@ -1,9 +1,9 @@
 import { TextField } from "@material-ui/core";
 import React, { useState } from "react";
-import { renameEntity } from "../../api/tree-a\pi";
+import { renameEntity } from "../../api/tree-api";
 import { ITreeEntity } from "../../interfaces/ITreeEntity";
 import { IBaseModalProps } from "../../interfaces/modal-interafaces";
-import ValidationPopUp from './ValidationPopUp'
+import ValidationPopUp from './ValidationPopUp';
 
 const RenameEntityModal = (props: IBaseModalProps) => {
     const { closeModal, entity, setTree } = props;

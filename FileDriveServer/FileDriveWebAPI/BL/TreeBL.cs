@@ -16,6 +16,7 @@ namespace FileDriveWebAPI.BL
         public TreeEntity[] GetTree()
         {
             TreeEntity[] tree = this.unitOfWork.TreeRepository.Get(includeProperties: "Children,Owner").Where(x => x.ParentId == null).ToArray();
+
             return tree;
         }
 

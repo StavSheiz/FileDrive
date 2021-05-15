@@ -23,11 +23,13 @@ namespace FileDriveWebAPI.Controllers
         private TreeBL treeBl;
         private ConversionBL conversionBl;
         private IAuthorizationService authorizationService;
+        private AuthorizationBL authorizationBl;
 
         public FilesController(FileDriveContext context, IAuthorizationService authorizationService)
         {
             this.treeBl = new TreeBL(context);
             this.conversionBl = new ConversionBL(context);
+            this.authorizationBl = new AuthorizationBL(context);
             this.authorizationService = authorizationService;
         }
 
@@ -35,7 +37,37 @@ namespace FileDriveWebAPI.Controllers
         [Authorize(Policy = "User")]
         public ActionResult<Response<TreeEntity[]>> GetTree()
         {
-            return new Response<TreeEntity[]>(this.treeBl.GetTree());
+            TreeEntity[] tree = this.treeBl.GetTree();
+            List<TreeEntity> treeWithPermissions = new List<TreeEntity>();
+
+            foreach(TreeEntity subTree in tree)
+            {
+                TreeEntity shakedTree = TreePermissionsShake(subTree);
+                if (shakedTree != null)
+                {
+                    treeWithPermissions.Add(shakedTree);
+                }
+            }
+            return new Response<TreeEntity[]>(treeWithPermissions.ToArray());
+        }
+
+        private TreeEntity TreePermissionsShake(TreeEntity root)
+        {
+            bool hasPermissions = authorizationBl.HasViewPermissions(User, root);
+            List<TreeEntity> childrenWithPermissions = new List<TreeEntity>();   
+
+            foreach (TreeEntity child in root.Children)
+            {
+                TreeEntity childTree = TreePermissionsShake(child);
+                if (childTree != null)
+                {
+                    hasPermissions = true;
+                    childrenWithPermissions.Add(childTree);
+                }
+            }
+
+            root.Children = childrenWithPermissions;
+            return hasPermissions ? root : null;
         }
 
         [HttpPost("addFile")]
@@ -68,10 +100,10 @@ namespace FileDriveWebAPI.Controllers
         {
             try
             {
-                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(entityId), new EditRequirement());
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.treeBl.GetTreeEntity(entityId), new EditRequirement());
                 if (authorizationResult.Succeeded)
                 {
-                    return new Response<bool>(this.bl.Delete(entityId));
+                    return new Response<bool>(this.treeBl.Delete(entityId));
                 }
                 else
                 {
@@ -116,10 +148,10 @@ namespace FileDriveWebAPI.Controllers
         {
             try
             {
-                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.bl.GetTreeEntity(renamedEntityDetails.entityId), new EditRequirement());
+                var authorizationResult = await authorizationService.AuthorizeAsync(User, this.treeBl.GetTreeEntity(renamedEntityDetails.entityId), new EditRequirement());
                 if (authorizationResult.Succeeded)
                 {
-                    bool succeeded = this.bl.RenameTreeEntity(renamedEntityDetails.entityId, renamedEntityDetails.newName);
+                    bool succeeded = this.treeBl.RenameTreeEntity(renamedEntityDetails.entityId, renamedEntityDetails.newName);
                     return new Response<bool>(succeeded);
                 }
                 else

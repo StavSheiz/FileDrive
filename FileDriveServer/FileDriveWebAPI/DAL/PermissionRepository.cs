@@ -23,17 +23,17 @@ namespace FileDriveWebAPI.DAL
 			bool hasPermissions = this.context.Permissions.FromSqlRaw(@"
 					WITH treeList AS
 						(SELECT tree.Id, tree.ParentId, 1 AS treeLevel
-						FROM [filedriveadmin].[Tree_Entities] tree
+						FROM [Tree_Entities] tree
 						WHERE tree.Id=@entityId
 
 						UNION ALL
 
 						SELECT parents.Id, Parents.ParentId, TL.treeLevel + 1 AS treeLevel
-						FROM [filedriveadmin].[Tree_Entities] parents
+						FROM [Tree_Entities] parents
 						INNER JOIN treeList AS TL
 						ON parents.Id = TL.ParentId
 						)
-					SELECT treeList.Id as EntityId, perms.Id as Id, perms.UserId as UserId, perms.PermissionType as PermissionType, treeList.treeLevel FROM treeList, [filedriveadmin].[Permissions] perms
+					SELECT treeList.Id as EntityId, perms.Id as Id, perms.UserId as UserId, perms.PermissionType as PermissionType, treeList.treeLevel FROM treeList, [Permissions] perms
 					WHERE treeList.Id=perms.EntityId and perms.UserId=@userId and PermissionType=@permissionType
 					", new SqlParameter[] { userParam, entityParam, permissionParam }).AsEnumerable().Any();
 

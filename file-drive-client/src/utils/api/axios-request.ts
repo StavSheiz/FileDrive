@@ -1,8 +1,8 @@
+import axios from 'axios';
 import { ENUMExceptionCodes } from '../../enums/ENUMExceptionCodes';
-import { IResponse } from './interfaces/response-interfaces';
 import { Logger } from '../log/logger';
 import { IDeleteRequestParams, IGetRequestParams, IPostRequestParams } from './interfaces/request-params-interfaces';
-import axios from 'axios'
+import { IResponse } from './interfaces/response-interfaces';
 
 const defaultHeaders = {
     "Access-Control-Allow-Credentials": "*",

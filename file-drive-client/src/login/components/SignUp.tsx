@@ -105,7 +105,7 @@ class SignUp extends React.Component<ISignUpProps, ISignUpState> {
                 <div className={classes.root}>
                     <Grid container direction="column" spacing={3} className={classes.container}>
                         <Grid item>
-                            <img src={logo} className={classes.logo} />
+                            <img alt={"logo"} src={"logo_transparent.png"} className={classes.logo} />
                         </Grid>
                         <Grid item>
                             <Typography variant="h6">Sign Up to FileDrive</Typography>
