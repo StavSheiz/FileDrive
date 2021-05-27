@@ -10,9 +10,6 @@ namespace FileDriveWebAPI.Utils.Exceptions
     [Serializable]
     public class InvalidPasswordException: BaseException
     {
-        public InvalidPasswordException() : base("Invalid password. Password must contain 8 or more characters")
-        {
-            this.setExceptionCode(ENUMExceptionCodes.InvalidPassword);
-        }
+        public InvalidPasswordException() : base("Invalid password. Password must contain 8 or more characters", ENUMExceptionCodes.InvalidPassword) { }
     }
 }

@@ -9,9 +9,6 @@ namespace FileDriveWebAPI.Utils.Exceptions
     [Serializable]
     public class PasswordNotMatchingException: BaseException
     {
-        public PasswordNotMatchingException() : base("Password does not match the confirmation password")
-        {
-            this.setExceptionCode(ENUMExceptionCodes.PasswordNotMatching);
-        }
+        public PasswordNotMatchingException() : base("Password does not match the confirmation password", ENUMExceptionCodes.PasswordNotMatching) { }
     }
 }

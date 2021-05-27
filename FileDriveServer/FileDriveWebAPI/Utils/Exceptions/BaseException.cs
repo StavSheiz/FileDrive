@@ -14,12 +14,11 @@ namespace FileDriveWebAPI.Utils.Exceptions
         public ENUMExceptionCodes ExceptionCode { get { return this.exceptionCode; } }
 
         public BaseException() : base() { }
-        public BaseException(string message) : base(message) { }
-
-        protected void setExceptionCode(ENUMExceptionCodes code) 
+        public BaseException(string message, ENUMExceptionCodes code) : base(message) 
         {
             this.exceptionCode = code;
         }
+
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

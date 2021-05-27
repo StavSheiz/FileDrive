@@ -10,9 +10,6 @@ namespace FileDriveWebAPI.Utils.Exceptions
     [Serializable]
     public class UserNameExistsException : BaseException
     {
-        public UserNameExistsException() : base("User name already exists")
-        {
-            this.setExceptionCode(ENUMExceptionCodes.UserNameExists);
-        }
+        public UserNameExistsException() : base("User name already exists", ENUMExceptionCodes.UserNameExists) { }
     }
 }

@@ -9,9 +9,6 @@ namespace FileDriveWebAPI.Utils.Exceptions
     [Serializable]
     public class ObjectAlreadyExistsException: BaseException
     {
-        public ObjectAlreadyExistsException() : base("Cannot insert - object already exists")
-        {
-            this.setExceptionCode(ENUMExceptionCodes.ObjectAlreadyExists);
-        }
+        public ObjectAlreadyExistsException() : base("Cannot insert - object already exists", ENUMExceptionCodes.ObjectAlreadyExists) { }
     }
 }

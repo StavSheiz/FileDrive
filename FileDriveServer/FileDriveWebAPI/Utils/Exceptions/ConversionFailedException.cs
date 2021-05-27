@@ -9,9 +9,6 @@ namespace FileDriveWebAPI.Utils.Exceptions
     [Serializable]
     public class ConversionFailedException: BaseException
     {
-        public ConversionFailedException(string fromFormat, string toFormat) : base($"File conversion failed from ${fromFormat} to ${toFormat}")
-        {
-            this.setExceptionCode(ENUMExceptionCodes.ConversionFailed);
-        }
+        public ConversionFailedException(string fromFormat, string toFormat) : base($"File conversion failed from ${fromFormat} to ${toFormat}", ENUMExceptionCodes.ConversionFailed) { }
     }
 }

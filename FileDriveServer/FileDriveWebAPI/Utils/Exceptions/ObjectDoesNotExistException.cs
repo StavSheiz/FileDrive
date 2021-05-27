@@ -10,9 +10,6 @@ namespace FileDriveWebAPI.Utils.Exceptions
     [Serializable]
     public class ObjectDoesNotExistException: BaseException
     {
-        public ObjectDoesNotExistException(): base("No object with the given parameters exists") 
-        {
-            this.setExceptionCode(ENUMExceptionCodes.ObjectDoesNotExist);
-        }
+        public ObjectDoesNotExistException() : base("No object with the given parameters exists", ENUMExceptionCodes.ObjectDoesNotExist) { }
     }
 }

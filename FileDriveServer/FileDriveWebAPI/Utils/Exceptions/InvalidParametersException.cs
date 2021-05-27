@@ -9,9 +9,7 @@ namespace FileDriveWebAPI.Utils.Exceptions
     [Serializable]
     public class InvalidParametersException: BaseException
     {
-        public InvalidParametersException() : base("One or more parameters are invalid")
-        {
-            this.setExceptionCode(ENUMExceptionCodes.InvalidParameters);
-        }
+        public InvalidParametersException() : base("One or more parameters are invalid", ENUMExceptionCodes.InvalidParameters) { }
+        
     }
 }
