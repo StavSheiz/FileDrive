@@ -105,7 +105,7 @@ namespace FileDriveWebAPI.BL
 
 
 
-        public string getNextFilename(string filename, int? parentId)
+        private string getNextFilename(string filename, int? parentId)
         {
             int i = 1;
 
