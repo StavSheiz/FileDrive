@@ -5,7 +5,6 @@ import { withStyles, Theme } from '@material-ui/core/styles';
 import { ClassNameMap } from '@material-ui/core/styles/withStyles';
 import { Typography, InputAdornment, IconButton, OutlinedInput, InputLabel, FormControl, Button, fade } from '@material-ui/core';
 import { Visibility, VisibilityOff, Clear } from '@material-ui/icons/';
-import logo from '../../logo.svg'
 import { LoginLogic } from '../logic/login-logic';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
