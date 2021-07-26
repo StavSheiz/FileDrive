@@ -1,4 +1,3 @@
-import { Theme } from "@material-ui/core";
 import React from 'react';
 import { connectMenu, ConnectMenuProps, ContextMenu, MenuItem } from "react-contextmenu";
 import { ENUMConverterType } from "../../../enums/ENUMConverterType";
@@ -10,10 +9,6 @@ import { ConversionLogic } from "../../logic/conversion-logic";
 import './cotext.css';
 
 interface ITreeContextMenuState { }
-
-const styles = (theme: Theme) => ({
-
-});
 
 
 class ConnectedMenu extends React.Component<ConnectMenuProps, ITreeContextMenuState> {

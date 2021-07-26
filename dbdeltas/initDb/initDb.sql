@@ -106,13 +106,3 @@ GO
 
 ALTER DATABASE [FileDriveDB] SET  READ_WRITE 
 GO
-
-
-insert [Tree_Entities] ([Id],[Name],[ParentId])
-select 1,'Photos',NULL UNION ALL
-select 2,'Documents',NULL UNION ALL
-select 3,'Pdf Docs',2 UNION ALL
-select 4,'Word Docs',2 UNION ALL
-select 5,'Wedding',1 UNION ALL
-select 6,'Birthday',1 UNION ALL
-select 7,'Bar Mitzvah',1;
